@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity PEPE (CPEPE) Presale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input, select {
+            padding: 8px;
+            margin: 10px 0;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #purchase-status {
+            margin-top: 10px;
+            color: #17a2b8;
+        }
+        #time-remaining {
+            font-size: 36px; /* По-големи цифри */
+            font-weight: bold; /* Удебелени за видимост */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Charity PEPE (CPEPE) Presale</h1>
+        <p>Join us: March 7, 2025, 20:00 UTC+2 - December 31, 2025</p>
+        <div id="presale-info">
+            <p>Presale Starting Price: <span id="current-price">1 ETH = 450,000,000 CPEPE</span></p>
+            <p>Liquidity Pool Price: ~0.00001 USD/CPEPE (60% profit potential)</p>
+            <p>Time until start: <span id="time-remaining"></span></p>
+            <p>Liquidity: 200B CPEPE for Uniswap on January 5, 2026</p>
+        </div>
+        <div id="wallet-info" class="hidden">
+            <p>Connected Wallet: <span id="wallet-address"></span></p>
+            <p>CPEPE Balance: <span id="balance"></span></p>
+        </div>
+        <button id="connect-wallet">Connect Wallet</button>
+        <div id="purchase-form" class="hidden">
+            <label for="purchase-amount">Amount (CPEPE):</label>
+            <input type="number" id="purchase-amount" placeholder="Enter amount" min="1" step="450000000">
+            <select id="currency-select">
+                <option value="ETH">ETH</option>
+                <option value="SOL">SOL</option>
+                <option value="USDT">USDT</option>
+                <option value="USDC">USDC</option>
+            </select>
+            <button id="purchase-button">Buy CPEPE</button>
+            <p id="purchase-status"></p>
+        </div>
+    </div>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <script>
+        const CONTRACT_ADDRESS = "0xYourContractAddressHere"; // Replace after deployment
+        const CONTRACT_ABI = [
+            "function buyTokensWithETH(uint256 amount) external payable",
+            "function buyTokensWithSOL(uint256 amount) external",
+            "function buyTokensWithUSDT(uint256 amount) external",
+            "function buyTokensWithUSDC(uint256 amount) external",
+            "function balanceOf(address account) external view returns (uint256)",
+            "function PRESALE_START_PERIOD_1() external view returns (uint256)"
+        ];
+
+        let provider;
+        let signer;
+        let contract;
+
+        document.getElementById("connect-wallet").addEventListener("click", connectWallet);
+        document.getElementById("purchase-button").addEventListener("click", purchaseTokens);
+
+        async function connectWallet() {
+            if (typeof window.ethereum !== "undefined") {
+                try {
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    signer = provider.getSigner();
+                    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                    const address = await signer.getAddress();
+                    document.getElementById("wallet-address").textContent = address.slice(0, 6) + "..." + address.slice(-4);
+                    document.getElementById("wallet-info").classList.remove("hidden");
+                    document.getElementById("connect-wallet").classList.add("hidden");
+                    document.getElementById("purchase-form").classList.remove("hidden");
+
+                    await updateBalance(address);
+                    await updatePresaleInfo();
+                    setInterval(updatePresaleInfo, 60000); // Update every minute
+                } catch (error) {
+                    console.error("Wallet connection error:", error);
+                    alert("Failed to connect wallet.");
+                }
+            } else {
+                alert("Please install MetaMask.");
+            }
+        }
+
+        async function updateBalance(address) {
+            const balance = await contract.balanceOf(address);
+            const balanceFormatted = ethers.utils.formatUnits(balance, 18);
+            document.getElementById("balance").textContent = `${balanceFormatted} CPEPE`;
+        }
+
+        async function updatePresaleInfo() {
+            const now = Math.floor(Date.now() / 1000);
+            const presaleStart = 1741356000; // 7 March 2025, 20:00 UTC+2 (18:00 UTC)
+            const timeLeft = presaleStart - now;
+            const timeElement = document.getElementById("time-remaining");
+            if (timeLeft <= 0) {
+                timeElement.textContent = "Presale has started!";
+            } else {
+                const days = Math.floor(timeLeft / (24 * 3600));
+                const hours = Math.floor((timeLeft % (24 * 3600)) / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                timeElement.textContent = `${days}d ${hours}h ${minutes}m`;
+            }
+        }
+
+        async function purchaseTokens() {
+            const amount = document.getElementById("purchase-amount").value;
+            const currency = document.getElementById("currency-select").value;
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount.");
+                return;
+            }
+
+            try {
+                let tx;
+                document.getElementById("purchase-status").textContent = "Processing...";
+                if (currency === "ETH") {
+                    const ethCost = ethers.utils.parseEther((amount / 450000000).toString());
+                    tx = await contract.buyTokensWithETH(amount, { value: ethCost });
+                } else if (currency === "SOL") {
+                    tx = await contract.buyTokensWithSOL(amount);
+                } else if (currency === "USDT") {
+                    tx = await contract.buyTokensWithUSDT(amount);
+                } else if (currency === "USDC") {
+                    tx = await contract.buyTokensWithUSDC(amount);
+                }
+                await tx.wait();
+                document.getElementById("purchase-status").textContent = "Purchase successful!";
+                await updateBalance(await signer.getAddress());
+            } catch (error) {
+                console.error("Purchase error:", error);
+                document.getElementById("purchase-status").textContent = "Purchase failed.";
+            }
+        }
+
+        // Initial call to update presale info
+        updatePresaleInfo();
+    </script>
+</body>
+</html>
