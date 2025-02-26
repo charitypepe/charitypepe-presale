@@ -1,7 +1,4 @@
 <script>
-    // Премахваме playSound(), защото текущият URL не работи
-    // Ако искаш звук, ще добавим локален файл или друг източник по-късно
-
     function startCountdown() {
         const endDate = new Date("December 31, 2025 23:59:59").getTime();
         const countdownElement = document.getElementById("countdown");
@@ -54,13 +51,13 @@
         });
         setInterval(createMoney, 2000);
 
-        // Добавяме информационен елемент на страницата
+        // Информационен бокс
         let infoBox = document.createElement("div");
         infoBox.id = "timelineInfo";
         infoBox.style.cssText = "position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #007bff; color: white; padding: 10px 20px; border-radius: 5px; display: none;";
         document.body.appendChild(infoBox);
 
-        // Поправен и опростен интерактивен таймлайн
+        // Интерактивен таймлайн
         const timelineSpans = document.querySelectorAll('.timeline-item span');
         if (timelineSpans.length === 0) {
             console.log("Timeline spans not found!");
@@ -79,7 +76,7 @@
                         infoBox.style.display = "block";
                         setTimeout(() => {
                             infoBox.style.display = "none";
-                        }, 3000); // Скрива се след 3 секунди
+                        }, 3000);
                     } else {
                         console.log("No info for ID:", id);
                     }
