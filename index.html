@@ -10,177 +10,295 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background: linear-gradient(45deg, #28a745, #218838);
+            animation: backgroundAnimation 5s infinite alternate;
+            overflow-x: hidden;
+            position: relative;
+            text-align: center;
+        }
+        @keyframes backgroundAnimation {
+            from { background: linear-gradient(45deg, #28a745, #218838); }
+            to { background: linear-gradient(45deg, #218838, #28a745); }
         }
         .container {
-            text-align: center;
             background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 50px 0;
+            padding: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .timeline-item {
+            text-align: center;
+            width: 22%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-in-out;
+        }
+        .timeline-item span {
+            display: block;
+            width: 100px;
+            height: 100px;
+            background: #f9f9f9;
+            border-radius: 50%;
+            border: 5px solid #007bff;
+            margin: auto;
+            line-height: 100px;
+            font-size: 40px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #007bff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .faq, .how-to-buy, .subscribe, .progress-bar, .wallet, .socials {
+            margin-top: 40px;
+            text-align: left;
+            background: #fff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
-        .hidden {
-            display: none;
+        .money {
+            position: absolute;
+            width: 50px;
+            height: auto;
+            opacity: 0.9;
+            animation: fallingMoney 4s linear forwards;
         }
-        button {
+        @keyframes fallingMoney {
+            from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            to { transform: translateY(500px) rotate(360deg); opacity: 0; }
+        }
+        .subscribe input {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+        .subscribe button, .wallet button {
             padding: 10px 20px;
-            margin: 5px;
-            background-color: #007bff;
+            background: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #0056b3;
+        .subscribe button:hover, .wallet button:hover {
+            background: #0056b3;
         }
-        input, select {
-            padding: 8px;
-            margin: 10px 0;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        .progress-bar .bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        #purchase-status {
-            margin-top: 10px;
-            color: #17a2b8;
+        .progress-bar .fill {
+            height: 100%;
+            background: #007bff;
+            width: 60%;
+            transition: width 1s ease-in-out;
         }
-        #time-remaining {
-            font-size: 36px; /* По-големи цифри */
-            font-weight: bold; /* Удебелени за видимост */
+        .socials a {
+            margin: 0 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .socials a:hover {
+            color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .timeline {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .timeline-item {
+                width: 100%;
+                margin-bottom: 20px;
+                opacity: 1;
+                transform: none;
+            }
+            .timeline-item span {
+                width: 80px;
+                height: 80px;
+                line-height: 80px;
+                font-size: 30px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
-        <p>Join us: March 7, 2025, 20:00 UTC+2 - December 31, 2025</p>
-        <div id="presale-info">
-            <p>Presale Starting Price: <span id="current-price">1 ETH = 450,000,000 CPEPE</span></p>
-            <p>Liquidity Pool Price: ~0.00001 USD/CPEPE (60% profit potential)</p>
-            <p>Time until start: <span id="time-remaining"></span></p>
-            <p>Liquidity: 200B CPEPE for Uniswap on January 5, 2026</p>
+        <div class="countdown" id="countdown">Loading...</div>
+        <div class="progress-bar">
+            <h2>Presale Progress</h2>
+            <div class="bar">
+                <div class="fill"></div>
+            </div>
+            <p>60% of tokens sold (12,000 / 20,000 CPEPE)</p>
         </div>
-        <div id="wallet-info" class="hidden">
-            <p>Connected Wallet: <span id="wallet-address"></span></p>
-            <p>CPEPE Balance: <span id="balance"></span></p>
+        <div class="timeline">
+            <div class="timeline-item" id="presale">
+                <span onclick="playSound()">📅</span>
+                <p>Presale</p>
+            </div>
+            <div class="timeline-item" id="liquidity">
+                <span onclick="playSound()">💰</span>
+                <p>Liquidity Pool</p>
+            </div>
+            <div class="timeline-item" id="transfers">
+                <span onclick="playSound()">🔓</span>
+                <p>Transfer Unlock</p>
+            </div>
+            <div class="timeline-item" id="voting">
+                <span onclick="playSound()">🗳️</span>
+                <p>Voting for Donations</p>
+            </div>
         </div>
-        <button id="connect-wallet">Connect Wallet</button>
-        <div id="purchase-form" class="hidden">
-            <label for="purchase-amount">Amount (CPEPE):</label>
-            <input type="number" id="purchase-amount" placeholder="Enter amount" min="1" step="450000000">
-            <select id="currency-select">
-                <option value="ETH">ETH</option>
-                <option value="SOL">SOL</option>
-                <option value="USDT">USDT</option>
-                <option value="USDC">USDC</option>
-            </select>
-            <button id="purchase-button">Buy CPEPE</button>
-            <p id="purchase-status"></p>
+        <div class="how-to-buy">
+            <h2>How to Buy CPEPE</h2>
+            <ol>
+                <li>Connect your wallet (MetaMask, TrustWallet, etc.).</li>
+                <li>Choose the amount of CPEPE tokens.</li>
+                <li>Confirm the transaction.</li>
+                <li>Wait for the transaction to complete.</li>
+            </ol>
+        </div>
+        <div class="wallet">
+            <h2>Presale Wallet Address</h2>
+            <p id="walletAddress">0x1234...5678</p>
+            <button onclick="copyAddress()">Copy Address</button>
+        </div>
+        <div class="faq">
+            <h2>Frequently Asked Questions</h2>
+            <p><strong>When will the presale end?</strong> - December 31, 2025</p>
+            <p><strong>How do I stake my CPEPE?</strong> - Staking will be available after the presale.</p>
+        </div>
+        <div class="subscribe">
+            <h2>Subscribe for Updates</h2>
+            <form id="subscribeForm">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <p id="subscribeMessage" style="display: none;">Thank you for subscribing!</p>
+        </div>
+        <div class="socials">
+            <h2>Join Our Community</h2>
+            <a href="https://www.charitypepe.com/" target="_blank">Website</a>
+            <a href="https://x.com/CharityPePE" target="_blank">X.com</a>
+            <a href="https://t.me/CharityPP" target="_blank">Telegram</a>
         </div>
     </div>
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
     <script>
-        const CONTRACT_ADDRESS = "0xYourContractAddressHere"; // Replace after deployment
-        const CONTRACT_ABI = [
-            "function buyTokensWithETH(uint256 amount) external payable",
-            "function buyTokensWithSOL(uint256 amount) external",
-            "function buyTokensWithUSDT(uint256 amount) external",
-            "function buyTokensWithUSDC(uint256 amount) external",
-            "function balanceOf(address account) external view returns (uint256)",
-            "function PRESALE_START_PERIOD_1() external view returns (uint256)"
-        ];
-
-        let provider;
-        let signer;
-        let contract;
-
-        document.getElementById("connect-wallet").addEventListener("click", connectWallet);
-        document.getElementById("purchase-button").addEventListener("click", purchaseTokens);
-
-        async function connectWallet() {
-            if (typeof window.ethereum !== "undefined") {
-                try {
-                    await window.ethereum.request({ method: "eth_requestAccounts" });
-                    provider = new ethers.providers.Web3Provider(window.ethereum);
-                    signer = provider.getSigner();
-                    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-                    const address = await signer.getAddress();
-                    document.getElementById("wallet-address").textContent = address.slice(0, 6) + "..." + address.slice(-4);
-                    document.getElementById("wallet-info").classList.remove("hidden");
-                    document.getElementById("connect-wallet").classList.add("hidden");
-                    document.getElementById("purchase-form").classList.remove("hidden");
-
-                    await updateBalance(address);
-                    await updatePresaleInfo();
-                    setInterval(updatePresaleInfo, 60000); // Update every minute
-                } catch (error) {
-                    console.error("Wallet connection error:", error);
-                    alert("Failed to connect wallet.");
-                }
-            } else {
-                alert("Please install MetaMask.");
-            }
+        function playSound() {
+            const audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
+            audio.play().catch(error => console.log("Error playing sound:", error));
         }
 
-        async function updateBalance(address) {
-            const balance = await contract.balanceOf(address);
-            const balanceFormatted = ethers.utils.formatUnits(balance, 18);
-            document.getElementById("balance").textContent = `${balanceFormatted} CPEPE`;
-        }
-
-        async function updatePresaleInfo() {
-            const now = Math.floor(Date.now() / 1000);
-            const presaleStart = 1741356000; // 7 March 2025, 20:00 UTC+2 (18:00 UTC)
-            const timeLeft = presaleStart - now;
-            const timeElement = document.getElementById("time-remaining");
-            if (timeLeft <= 0) {
-                timeElement.textContent = "Presale has started!";
-            } else {
-                const days = Math.floor(timeLeft / (24 * 3600));
-                const hours = Math.floor((timeLeft % (24 * 3600)) / 3600);
-                const minutes = Math.floor((timeLeft % 3600) / 60);
-                timeElement.textContent = `${days}d ${hours}h ${minutes}m`;
-            }
-        }
-
-        async function purchaseTokens() {
-            const amount = document.getElementById("purchase-amount").value;
-            const currency = document.getElementById("currency-select").value;
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid amount.");
+        function startCountdown() {
+            const endDate = new Date("December 31, 2025 23:59:59").getTime();
+            const countdownElement = document.getElementById("countdown");
+            if (!countdownElement) {
+                console.log("Countdown element not found!");
                 return;
             }
-
-            try {
-                let tx;
-                document.getElementById("purchase-status").textContent = "Processing...";
-                if (currency === "ETH") {
-                    const ethCost = ethers.utils.parseEther((amount / 450000000).toString());
-                    tx = await contract.buyTokensWithETH(amount, { value: ethCost });
-                } else if (currency === "SOL") {
-                    tx = await contract.buyTokensWithSOL(amount);
-                } else if (currency === "USDT") {
-                    tx = await contract.buyTokensWithUSDT(amount);
-                } else if (currency === "USDC") {
-                    tx = await contract.buyTokensWithUSDC(amount);
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const timeLeft = endDate - now;
+                if (timeLeft <= 0) {
+                    countdownElement.innerHTML = "Presale has ended!";
+                    clearInterval(interval);
+                    return;
                 }
-                await tx.wait();
-                document.getElementById("purchase-status").textContent = "Purchase successful!";
-                await updateBalance(await signer.getAddress());
-            } catch (error) {
-                console.error("Purchase error:", error);
-                document.getElementById("purchase-status").textContent = "Purchase failed.";
-            }
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                countdownElement.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
         }
 
-        // Initial call to update presale info
-        updatePresaleInfo();
+        function createMoney() {
+            if (document.querySelectorAll('.money').length >= 10) return;
+            const money = document.createElement("img");
+            money.classList.add("money");
+            money.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Euro_banknotes.png/320px-Euro_banknotes.png";
+            money.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+            money.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            document.body.appendChild(money);
+            money.addEventListener('animationend', () => money.remove());
+        }
+
+        function copyAddress() {
+            const address = document.getElementById("walletAddress").innerText;
+            navigator.clipboard.writeText(address).then(() => {
+                alert("Address copied to clipboard!");
+            });
+        }
+
+        window.onload = function() {
+            startCountdown();
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
+            setInterval(createMoney, 2000);
+
+            // Interactive timeline
+            document.querySelectorAll('.timeline-item span').forEach(item => {
+                item.addEventListener('click', function() {
+                    playSound();
+                    const info = {
+                        presale: "Presale starts now and ends on Dec 31, 2025.",
+                        liquidity: "Liquidity pool will be locked after presale.",
+                        transfers: "Transfers unlock after liquidity is added.",
+                        voting: "Vote for charities starting Jan 2026."
+                    };
+                    const id = this.parentElement.id;
+                    alert(info[id]);
+                });
+            });
+
+            // Subscribe form
+            document.getElementById("subscribeForm").addEventListener("submit", function(e) {
+                e.preventDefault();
+                document.getElementById("subscribeMessage").style.display = "block";
+                this.reset();
+                setTimeout(() => {
+                    document.getElementById("subscribeMessage").style.display = "none";
+                }, 3000);
+            });
+        };
     </script>
 </body>
 </html>
