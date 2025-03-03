@@ -13,17 +13,10 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(120deg, #071a16, #0d2e27, #071a16);
-            background-size: 180% 180%;
-            animation: glossyOil 6s ease-in-out infinite;
+            background: #132804; /* New background color */
             overflow-x: hidden;
             position: relative;
             text-align: center;
-        }
-        @keyframes glossyOil {
-            0% { background-position: 0% 0%; filter: brightness(1); }
-            50% { background-position: 100% 100%; filter: brightness(1.1); }
-            100% { background-position: 0% 0%; filter: brightness(1); }
         }
         .container {
             background: #0d2e27;
@@ -60,7 +53,7 @@
             position: absolute;
             top: 40px;
             right: 40px;
-            background: #0d2e27;
+            background: #132804; /* New background color for payment app */
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -219,7 +212,7 @@
         }
         .cat {
             position: absolute;
-            width: 120px;
+            width: 150px; /* Bigger for 3D effect */
             height: auto;
             z-index: 6;
             animation: wanderCat 15s infinite ease-in-out;
@@ -342,7 +335,7 @@
                 font-size: 24px;
             }
             .cat {
-                width: 80px;
+                width: 100px;
             }
             .coin, .emoji {
                 font-size: 30px;
@@ -457,7 +450,7 @@
             <a href="https://t.me/CharityPP" target="_blank">Telegram</a>
         </div>
     </div>
-    <img src="https://cdn.pixabay.com/photo/2016/03/28/12/35/cat-1285634_1280.png" alt="Wandering Cat" class="cat">
+    <img src="https://cdn.pixabay.com/photo/2023/08/18/15/02/ai-generated-8198690_1280.png" alt="3D Cat Head" class="cat">
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
