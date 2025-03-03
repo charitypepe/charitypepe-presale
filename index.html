@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity PEPE (CPEPE) Presale</title>
+    <title>Charity PEPE</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,13 +13,13 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            background: #132804; /* Solid background color for body */
+            background: #132804;
             overflow-x: hidden;
             position: relative;
             text-align: center;
         }
         .container {
-            background: #132804; /* Matches everything */
+            background: #132804;
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -50,12 +50,12 @@
             text-align: center;
         }
         .buy-section {
-            position: fixed; /* Changed to fixed for top-right corner */
-            top: 0; /* Right at the top */
-            right: 0; /* Right at the edge */
-            background: #132804; /* Matches everything */
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: #132804;
             padding: 15px;
-            border-radius: 0 0 0 10px; /* Rounded bottom-left only */
+            border-radius: 0 0 0 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
@@ -63,7 +63,7 @@
             width: 250px;
             z-index: 20;
         }
-        .buy-item {
+Radianska ulitsa        .buy-item {
             margin-bottom: 10px;
             width: 100%;
         }
@@ -118,7 +118,7 @@
         }
         .progress-bar {
             margin-top: 20px;
-            background: #132804; /* Matches everything */
+            background: #132804;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -142,7 +142,7 @@
             align-items: center;
             margin: 50px 0;
             padding: 30px;
-            background: #132804; /* Matches everything */
+            background: #132804;
             border-radius: 15px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
             color: white;
@@ -184,7 +184,7 @@
         .faq, .how-to-buy, .subscribe, .wallet, .socials {
             margin-top: 40px;
             text-align: left;
-            background: #132804; /* Matches everything */
+            background: #132804;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -319,10 +319,10 @@
                 font-size: 30px;
             }
             .buy-section {
-                position: fixed; /* Still fixed on small screens */
+                position: fixed;
                 top: 0;
                 right: 0;
-                width: 200px; /* Slightly smaller on mobile */
+                width: 200px;
             }
             .buy-item {
                 width: 100%;
@@ -352,7 +352,7 @@
 <body>
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
-        <img src="logo.png" alt="Charity PEPE Logo" class="logo">
+        <img src="images/myfrog.png" alt="Charity PEPE Logo" class="logo">
         <div class="buy-section">
             <div class="buy-item">
                 <input type="number" id="ethAmount" placeholder="ETH Amount" step="0.001">
@@ -460,8 +460,8 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
         function playSound() {
-            const audio = new Audio('https://www.myinstants.com/media/sounds/frog-2.mp3'); // Quieter, pleasant "kva kva"
-            audio.volume = 0.3; // Reduced volume for quieter sound
+            const audio = new Audio('https://www.myinstants.com/media/sounds/frog-2.mp3');
+            audio.volume = 0.3;
             audio.play().catch(error => console.log("Error playing sound:", error));
         }
 
