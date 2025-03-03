@@ -68,7 +68,7 @@
             flex-direction: column;
             align-items: flex-end;
             width: 250px;
-            z-index: 20; /* Ensures it stays above other content */
+            z-index: 20;
         }
         .buy-item {
             margin-bottom: 10px;
@@ -149,7 +149,7 @@
             border-radius: 15px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
             color: white;
-            margin-top: 70px; /* Moved 5cm (50px) lower */
+            margin-top: 70px;
         }
         .timeline-item, .tokenomics-item {
             text-align: center;
@@ -190,6 +190,20 @@
         @keyframes fallingMoney {
             from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
             to { transform: translateY(500px) rotate(360deg); opacity: 0; }
+        }
+        .cat {
+            position: absolute;
+            width: 100px;
+            height: auto;
+            z-index: 5; /* Below container but above background */
+            animation: wander 20s infinite ease-in-out;
+        }
+        @keyframes wander {
+            0% { left: 10%; top: 10%; transform: translate(0, 0); }
+            25% { left: 70%; top: 30%; transform: translate(-50%, -50%) rotate(10deg); }
+            50% { left: 50%; top: 60%; transform: translate(-50%, -50%) rotate(-10deg); }
+            75% { left: 20%; top: 80%; transform: translate(-50%, -50%) rotate(5deg); }
+            100% { left: 10%; top: 10%; transform: translate(0, 0); }
         }
         .subscribe input {
             padding: 10px;
@@ -288,6 +302,9 @@
             }
             h1 {
                 font-size: 24px;
+            }
+            .cat {
+                width: 60px;
             }
         }
     </style>
@@ -394,6 +411,7 @@
             <a href="https://t.me/CharityPP" target="_blank">Telegram</a>
         </div>
     </div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Cat_animated.gif" alt="Wandering Cat" class="cat">
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
