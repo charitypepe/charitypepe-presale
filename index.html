@@ -36,12 +36,14 @@
             to { opacity: 1; }
         }
         .logo {
-            display: block;
-            margin: 0 auto 20px auto;
-            max-width: 300px;
+            position: absolute;
+            left: 100px; /* 10 см от левия ръб */
+            top: 10px; /* 1 см от горния таван */
+            width: 150px; /* По-голямо лого */
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 30; /* Над другите елементи */
         }
         h1 {
             font-size: 32px;
@@ -51,11 +53,11 @@
         }
         .buy-section {
             position: fixed;
-            top: 0;
-            right: 0;
+            top: 10px;
+            right: 10px;
             background: #132804;
             padding: 15px;
-            border-radius: 0 0 0 10px;
+            border-radius: 0 0 10px 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
@@ -63,7 +65,7 @@
             width: 250px;
             z-index: 20;
         }
-Radianska ulitsa        .buy-item {
+        .buy-item {
             margin-bottom: 10px;
             width: 100%;
         }
@@ -319,10 +321,13 @@ Radianska ulitsa        .buy-item {
                 font-size: 30px;
             }
             .buy-section {
-                position: fixed;
-                top: 0;
-                right: 0;
                 width: 200px;
+                right: 10px;
+            }
+            .logo {
+                width: 120px; /* Леко намален размер за мобилни устройства */
+                left: 100px; /* Остава на 10 см от левия ръб */
+                top: 10px; /* Остава на 1 см от горния таван */
             }
             .buy-item {
                 width: 100%;
@@ -352,22 +357,22 @@ Radianska ulitsa        .buy-item {
 <body>
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
-        <img src="https://raw.githubusercontent.com/charitypepe-presale/CharityPEPE/main/images/myfrog_large.png" alt="Charity PEPE" class="logo">
         <div class="buy-section">
             <div class="buy-item">
-                <input type="number" id="ethAmount" placeholder="ETH Amount" step="0.001">
+                <input type="number" id="ethAmount" placeholder="Enter ETH Amount" step="0.001">
                 <button onclick="buyWithETH()">Buy with ETH</button>
             </div>
             <div class="buy-item">
-                <input type="number" id="usdtAmount" placeholder="USDT Amount" step="1">
+                <input type="number" id="usdtAmount" placeholder="Enter USDT Amount" step="1">
                 <button onclick="buyWithUSDT()">Buy with USDT</button>
             </div>
             <div class="buy-item">
-                <input type="number" id="usdcAmount" placeholder="USDC Amount" step="1">
+                <input type="number" id="usdcAmount" placeholder="Enter USDC Amount" step="1">
                 <button onclick="buyWithUSDC()">Buy with USDC</button>
             </div>
             <p id="status">Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!</p>
         </div>
+        <img src="https://raw.githubusercontent.com/charitypepe/charitypepe-presale/main/myfrog_large.png" alt="Charity PEPE Logo" class="logo">
         <div class="countdown" id="countdown">Loading...</div>
         <div class="progress-bar">
             <h2>Presale Progress</h2>
@@ -418,7 +423,7 @@ Radianska ulitsa        .buy-item {
         </div>
         <div class="about">
             <h2>About CharityPEPE</h2>
-            <p>CharityPEPE (CPEPE) is a revolutionary cryptocurrency project launched on March 7, 2025, with a mission to blend fun, community, and impact. Built on the Ethereum blockchain, CPEPE aims to achieve a $2 billion market cap by March 2026 while empowering its holders. With a total supply of 1 trillion tokens, our presale offers early adopters a chance to join the journey at $0.0001 (Stage 1) and $0.0002 (Stage 2), complete with a 1.5% bonus from our reserve fund. Join us as we redefine meme coins with purpose! Ribbit! 🐸</p>
+            <p>CharityPEPE (CPEPE) is an innovative cryptocurrency initiative launched on March 7, 2025, aiming to combine entertainment, community engagement, and meaningful impact. Operating on the Ethereum blockchain, CPEPE targets a $2 billion market cap by March 2026 while rewarding its supporters. With a total supply of 1 trillion tokens, the presale gives early investors the opportunity to join at $0.0001 (Stage 1) and $0.0002 (Stage 2), enhanced by a 1.5% bonus from our reserve fund. Be part of our mission to transform meme coins with a purpose! Ribbit! 🐸</p>
         </div>
         <div class="how-to-buy">
             <h2>How to Buy CPEPE</h2>
@@ -459,24 +464,16 @@ Radianska ulitsa        .buy-item {
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
-        function playSound() {
-            const audio = new Audio('https://www.myinstants.com/media/sounds/frog-2.mp3');
-            audio.volume = 0.3;
-            audio.play().catch(error => console.log("Error playing sound:", error));
-        }
-
+        // Countdown
         function startCountdown() {
             const endDate = new Date("January 1, 2026 23:59:59").getTime();
             const countdownElement = document.getElementById("countdown");
-            if (!countdownElement) {
-                console.log("Countdown element not found!");
-                return;
-            }
+            if (!countdownElement) return;
             const interval = setInterval(() => {
                 const now = new Date().getTime();
                 const timeLeft = endDate - now;
                 if (timeLeft <= 0) {
-                    countdownElement.innerHTML = "Presale Stage 2 has ended!";
+                    countdownElement.innerHTML = "The presale has ended!";
                     clearInterval(interval);
                     return;
                 }
@@ -484,23 +481,34 @@ Radianska ulitsa        .buy-item {
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                countdownElement.innerHTML = `Time left for Presale Stage 2: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                countdownElement.innerHTML = `Time remaining for Stage 2: ${days}d ${hours}h ${minutes}m ${seconds}s`;
             }, 1000);
         }
 
-        function updateProgress() {
-            const now = new Date().getTime();
-            const startStage1 = new Date("March 7, 2025").getTime();
-            const endStage2 = new Date("January 1, 2026").getTime();
-            const totalTokens = 200000000000;
-            const presaleDays = (endStage2 - startStage1) / (1000 * 60 * 60 * 24);
-            const daysPassed = (now - startStage1) / (1000 * 60 * 60 * 24);
-            const progress = Math.min(Math.max((daysPassed / presaleDays) * 100, 0), 100);
-            const tokensSold = Math.floor(totalTokens * (progress / 100));
-            document.getElementById("progressFill").style.width = `${progress}%`;
-            document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${tokensSold.toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
+        // Progress bar update with real contract data
+        async function updateProgress() {
+            try {
+                const totalTokens = 200000000000; // 200 billion for presale
+                const tokensSold = await contract.methods.tokensSold().call();
+                const progress = (tokensSold / totalTokens) * 100;
+                document.getElementById("progressFill").style.width = `${progress}%`;
+                document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${Number(tokensSold).toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
+            } catch (error) {
+                console.log("Error updating progress:", error);
+                const now = new Date().getTime();
+                const startStage1 = new Date("March 7, 2025").getTime();
+                const endStage2 = new Date("January 1, 2026").getTime();
+                const totalTokens = 200000000000;
+                const presaleDays = (endStage2 - startStage1) / (1000 * 60 * 60 * 24);
+                const daysPassed = (now - startStage1) / (1000 * 60 * 60 * 24);
+                const progress = Math.min(Math.max((daysPassed / presaleDays) * 100, 0), 100);
+                const tokensSold = Math.floor(totalTokens * (progress / 100));
+                document.getElementById("progressFill").style.width = `${progress}%`;
+                document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${tokensSold.toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
+            }
         }
 
+        // Animations
         function createMoney() {
             if (document.querySelectorAll('.money').length >= 10) return;
             const money = document.createElement("img");
@@ -536,110 +544,146 @@ Radianska ulitsa        .buy-item {
             emoji.addEventListener('animationend', () => emoji.remove());
         }
 
+        // Copy address
         function copyAddress() {
             const address = document.getElementById("walletAddress").innerText;
-            navigator.clipboard.writeText(address).then(() => {
-                alert("Address copied to clipboard!");
-            });
+            navigator.clipboard.writeText(address).then(() => alert("Address copied!"));
         }
 
+        // Web3 setup
         const web3 = new Web3(window.ethereum);
         const contractAddress = "0xAD2128444D175835075F017263deB7fece25c881";
-        const contractABI = [
-            {"name": "buyWithETH", "type": "function", "stateMutability": "payable", "inputs": [], "outputs": []},
-            {"name": "buyWithUSDT", "type": "function", "stateMutability": "nonpayable", "inputs": [{"name": "amount", "type": "uint256"}], "outputs": []},
-            {"name": "buyWithUSDC", "type": "function", "stateMutability": "nonpayable", "inputs": [{"name": "amount", "type": "uint256"}], "outputs": []}
-        ];
-        const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+        const contractABI = [{"inputs":[],"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalAmount","type":"uint256"}],"name":"Airdrop","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ETHWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"period","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"string","name":"currency","type":"string"}],"name":"TokensPurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDCWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDTWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"airdrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyWithETH","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdcAmount","type":"uint256"}],"name":"buyWithUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdtAmount","type":"uint256"}],"name":"buyWithUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"period","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tokensSold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+        const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // USDT Mainnet
+        const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; // USDC Mainnet
         const erc20ABI = [
-            {"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"type":"function"}
+            {"constant": false, "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}], "name": "approve", "outputs": [{"name": "", "type": "bool"}], "type": "function"},
+            {"constant": true, "inputs": [{"name": "account", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}
         ];
 
         const contract = new web3.eth.Contract(contractABI, contractAddress);
         const usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
         const usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
 
+        // Initialization
         async function init() {
+            const status = document.getElementById("status");
             if (!window.ethereum) {
-                document.getElementById("status").innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!";
+                status.innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a>!";
                 return;
             }
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            document.getElementById("status").innerText = "Connected!";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const networkId = await web3.eth.net.getId();
+                if (networkId !== 1) {
+                    status.className = "error";
+                    status.innerText = "Please switch to Ethereum Mainnet!";
+                    return;
+                }
+                status.className = "success";
+                status.innerText = "Connected to the network!";
+                updateProgress();
+            } catch (error) {
+                status.className = "error";
+                status.innerText = "Connection error: " + error.message;
+            }
         }
 
+        // Buy with ETH
         async function buyWithETH() {
             const ethAmount = document.getElementById("ethAmount").value;
+            const status = document.getElementById("status");
             if (!ethAmount || ethAmount <= 0) {
-                alert("Enter a valid ETH amount!");
+                alert("Please enter a valid ETH amount!");
                 return;
             }
-            const accounts = await web3.eth.getAccounts();
-            const weiAmount = web3.utils.toWei(ethAmount, "ether");
-            const status = document.getElementById("status");
-            status.className = "processing";
-            status.innerText = "Processing...";
             try {
+                const accounts = await web3.eth.getAccounts();
+                const weiAmount = web3.utils.toWei(ethAmount, "ether");
+                status.className = "processing";
+                status.innerText = "Processing...";
                 const tx = await contract.methods.buyWithETH().send({
                     from: accounts[0],
                     value: weiAmount,
-                    gas: 300000
+                    gas: 300000,
+                    gasPrice: await web3.eth.getGasPrice()
                 });
                 status.className = "success";
-                status.innerText = `Success! Tx: ${tx.transactionHash}`;
+                status.innerText = `Success! Transaction: ${tx.transactionHash}`;
+                updateProgress();
             } catch (error) {
                 status.className = "error";
                 status.innerText = "Error: " + error.message;
             }
         }
 
+        // Buy with USDT
         async function buyWithUSDT() {
             const usdtAmount = document.getElementById("usdtAmount").value;
+            const status = document.getElementById("status");
             if (!usdtAmount || usdtAmount <= 0) {
-                alert("Enter a valid USDT amount!");
+                alert("Please enter a valid USDT amount!");
                 return;
             }
-            const accounts = await web3.eth.getAccounts();
-            const weiAmount = web3.utils.toWei(usdtAmount, "mwei");
-            const status = document.getElementById("status");
-            status.className = "processing";
-            status.innerText = "Approving USDT...";
             try {
-                await usdtContract.methods.approve(contractAddress, weiAmount).send({ from: accounts[0], gas: 100000 });
+                const accounts = await web3.eth.getAccounts();
+                const weiAmount = web3.utils.toWei(usdtAmount, "mwei");
+                status.className = "processing";
+                status.innerText = "Approving USDT...";
+                await usdtContract.methods.approve(contractAddress, weiAmount).send({
+                    from: accounts[0],
+                    gas: 100000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
                 status.innerText = "Processing...";
-                const tx = await contract.methods.buyWithUSDT(weiAmount).send({ from: accounts[0], gas: 400000 });
+                const tx = await contract.methods.buyWithUSDT(weiAmount).send({
+                    from: accounts[0],
+                    gas: 400000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
                 status.className = "success";
-                status.innerText = `Success! Tx: ${tx.transactionHash}`;
+                status.innerText = `Success! Transaction: ${tx.transactionHash}`;
+                updateProgress();
             } catch (error) {
                 status.className = "error";
                 status.innerText = "Error: " + error.message;
             }
         }
 
+        // Buy with USDC
         async function buyWithUSDC() {
             const usdcAmount = document.getElementById("usdcAmount").value;
+            const status = document.getElementById("status");
             if (!usdcAmount || usdcAmount <= 0) {
-                alert("Enter a valid USDC amount!");
+                alert("Please enter a valid USDC amount!");
                 return;
             }
-            const accounts = await web3.eth.getAccounts();
-            const weiAmount = web3.utils.toWei(usdcAmount, "mwei");
-            const status = document.getElementById("status");
-            status.className = "processing";
-            status.innerText = "Approving USDC...";
             try {
-                await usdcContract.methods.approve(contractAddress, weiAmount).send({ from: accounts[0], gas: 100000 });
+                const accounts = await web3.eth.getAccounts();
+                const weiAmount = web3.utils.toWei(usdcAmount, "mwei");
+                status.className = "processing";
+                status.innerText = "Approving USDC...";
+                await usdcContract.methods.approve(contractAddress, weiAmount).send({
+                    from: accounts[0],
+                    gas: 100000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
                 status.innerText = "Processing...";
-                const tx = await contract.methods.buyWithUSDC(weiAmount).send({ from: accounts[0], gas: 400000 });
+                const tx = await contract.methods.buyWithUSDC(weiAmount).send({
+                    from: accounts[0],
+                    gas: 400000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
                 status.className = "success";
-                status.innerText = `Success! Tx: ${tx.transactionHash}`;
+                status.innerText = `Success! Transaction: ${tx.transactionHash}`;
+                updateProgress();
             } catch (error) {
                 status.className = "error";
                 status.innerText = "Error: " + error.message;
             }
         }
 
+        // Page load
         window.onload = function() {
             startCountdown();
             updateProgress();
@@ -667,44 +711,33 @@ Radianska ulitsa        .buy-item {
             document.body.appendChild(infoBox);
 
             const timelineSpans = document.querySelectorAll('.timeline-item span, .tokenomics-item span');
-            if (timelineSpans.length === 0) {
-                console.log("Timeline spans not found!");
-            } else {
-                timelineSpans.forEach(span => {
-                    span.addEventListener('click', function() {
-                        playSound();
-                        const info = {
-                            presale1: "Presale Stage 1: March 7, 2025 - July 30, 2025. Price: $0.0001. 100B CPEPE available.",
-                            presale2: "Presale Stage 2: July 30, 2025 - January 1, 2026. Price: $0.0002. 100B CPEPE available.",
-                            liquidity: "Liquidity Launch: January 2, 2026 with $15M from presale funds.",
-                            marketCap: "Market Cap Goal: $2B by March 2026.",
-                            reserve: "Reserve Fund: 40% (400B CPEPE) for liquidity, staking, and future plans.",
-                            presale: "Presale: 20% (200B CPEPE) + 1.5% bonus (15B CPEPE from Reserve).",
-                            publicSale: "Public Sale: 20% (200B CPEPE) for broad distribution.",
-                            marketing: "Marketing & Partnerships: 15% (150B CPEPE) for promotion and growth.",
-                            team: "Team & Founders: 5% (50B CPEPE), locked for 2 years."
-                        };
-                        const id = this.parentElement.id;
-                        if (info[id]) {
-                            infoBox.textContent = info[id];
-                            infoBox.style.display = "block";
-                            setTimeout(() => {
-                                infoBox.style.display = "none";
-                            }, 5000);
-                        } else {
-                            console.log("No info for ID:", id);
-                        }
-                    });
+            timelineSpans.forEach(span => {
+                span.addEventListener('click', function() {
+                    const info = {
+                        presale1: "Stage 1: March 7, 2025 - July 30, 2025. Price: $0.0001. 100B CPEPE.",
+                        presale2: "Stage 2: July 30, 2025 - January 1, 2026. Price: $0.0002. 100B CPEPE.",
+                        liquidity: "Liquidity Launch: January 2, 2026 with $15M.",
+                        marketCap: "Goal: $2B by March 2026.",
+                        reserve: "Reserve: 40% (400B CPEPE).",
+                        presale: "Presale: 20% (200B CPEPE) + 1.5% bonus.",
+                        publicSale: "Public Sale: 20% (200B CPEPE).",
+                        marketing: "Marketing: 15% (150B CPEPE).",
+                        team: "Team: 5% (50B CPEPE), locked for 2 years."
+                    };
+                    const id = this.parentElement.id;
+                    if (info[id]) {
+                        infoBox.textContent = info[id];
+                        infoBox.style.display = "block";
+                        setTimeout(() => infoBox.style.display = "none", 5000);
+                    }
                 });
-            }
+            });
 
             document.getElementById("subscribeForm").addEventListener("submit", function(e) {
                 e.preventDefault();
                 document.getElementById("subscribeMessage").style.display = "block";
                 this.reset();
-                setTimeout(() => {
-                    document.getElementById("subscribeMessage").style.display = "none";
-                }, 3000);
+                setTimeout(() => document.getElementById("subscribeMessage").style.display = "none", 3000);
             });
 
             document.getElementById("scrollTop").addEventListener("click", () => {
