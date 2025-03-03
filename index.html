@@ -13,7 +13,7 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            background: #132804; /* New background color */
+            background: #132804; /* Solid background color */
             overflow-x: hidden;
             position: relative;
             text-align: center;
@@ -53,7 +53,7 @@
             position: absolute;
             top: 40px;
             right: 40px;
-            background: #132804; /* New background color for payment app */
+            background: #132804; /* Updated to match background */
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -118,6 +118,10 @@
         }
         .progress-bar {
             margin-top: 20px;
+            background: #132804; /* Updated to match background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .progress-bar .bar {
             width: 100%;
@@ -138,7 +142,7 @@
             align-items: center;
             margin: 50px 0;
             padding: 30px;
-            background: #0d2e27;
+            background: #132804; /* Updated timeline to match background */
             border-radius: 15px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
             color: white;
@@ -167,6 +171,7 @@
         .about {
             flex-direction: column;
             text-align: center;
+            background: #0d2e27; /* Keeping About section distinct */
         }
         .about h2 {
             color: #2ecc71;
@@ -210,14 +215,14 @@
             from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
             to { transform: translateY(500px) rotate(720deg); opacity: 0; }
         }
-        .cat {
+        .animal {
             position: absolute;
-            width: 150px; /* Bigger for 3D effect */
+            width: 150px; /* Bigger for effect */
             height: auto;
             z-index: 6;
-            animation: wanderCat 15s infinite ease-in-out;
+            animation: wanderAnimal 15s infinite ease-in-out;
         }
-        @keyframes wanderCat {
+        @keyframes wanderAnimal {
             0% { left: 5%; top: 10%; transform: translate(0, 0) scaleX(1); }
             25% { left: 60%; top: 20%; transform: translate(-50%, -50%) scaleX(-1); }
             50% { left: 40%; top: 50%; transform: translate(-50%, -50%) scaleX(1); }
@@ -334,7 +339,7 @@
             h1 {
                 font-size: 24px;
             }
-            .cat {
+            .animal {
                 width: 100px;
             }
             .coin, .emoji {
@@ -450,7 +455,7 @@
             <a href="https://t.me/CharityPP" target="_blank">Telegram</a>
         </div>
     </div>
-    <img src="https://cdn.pixabay.com/photo/2023/08/18/15/02/ai-generated-8198690_1280.png" alt="3D Cat Head" class="cat">
+    <img src="https://cdn.pixabay.com/photo/2017/03/14/21/00/french-bulldog-2141398_1280.jpg" alt="Wandering Puppy" class="animal">
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
