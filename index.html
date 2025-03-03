@@ -35,16 +35,6 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
-        .logo {
-            position: absolute;
-            right: 0px; /* Плътно в дясно */
-            top: 0px; /* Плътно горе */
-            width: 150px;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 30;
-        }
         h1 {
             font-size: 32px;
             color: #2ecc71;
@@ -67,9 +57,12 @@
         .buy-item {
             margin-bottom: 10px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .buy-section input {
-            padding: 8px;
+            padding: 16px;
             border: 1px solid #007bff;
             border-radius: 5px;
             font-size: 14px;
@@ -77,6 +70,8 @@
             background: #143d33;
             color: #fff;
             width: 100%;
+            height: 50px; /* Фиксирана височина за симетрия */
+            box-sizing: border-box;
             margin-bottom: 5px;
         }
         .buy-section input::placeholder {
@@ -85,7 +80,7 @@
             opacity: 0.8;
         }
         .buy-section button {
-            padding: 8px 15px;
+            padding: 16px 15px;
             background: #007bff;
             color: white;
             border: none;
@@ -93,9 +88,18 @@
             cursor: pointer;
             font-weight: 700;
             width: 100%;
+            height: 50px; /* Фиксирана височина за симетрия */
+            box-sizing: border-box;
         }
         .buy-section button:hover {
             background: #0056b3;
+        }
+        #connectButton {
+            margin-top: 10px;
+            background: #2ecc71; /* Различен цвят за Connect бутона */
+        }
+        #connectButton:hover {
+            background: #27ae60;
         }
         #status {
             margin-top: 10px;
@@ -323,15 +327,6 @@
                 width: 90%;
                 max-width: 300px;
             }
-            .logo {
-                width: 120px;
-                right: 0px;
-                top: 0px;
-            }
-            .buy-item {
-                width: 100%;
-                margin-bottom: 10px;
-            }
             .container {
                 width: 100%;
                 padding: 20px;
@@ -356,7 +351,6 @@
 <body>
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
-        <img src="https://raw.githubusercontent.com/charitypepe/charitypepe-presale/main/myfrog_large.png" alt="Charity PEPE Logo" class="logo">
         <div class="countdown" id="countdown">Loading...</div>
         <div class="progress-bar">
             <h2>Presale Progress</h2>
@@ -378,7 +372,8 @@
                 <input type="number" id="usdcAmount" placeholder="Enter USDC Amount" step="1">
                 <button onclick="buyWithUSDC()">Buy with USDC</button>
             </div>
-            <p id="status">Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!</p>
+            <p id="status">Please connect your wallet to buy CPEPE!</p>
+            <button id="connectButton" onclick="connectWallet()">Connect</button>
         </div>
         <div class="timeline">
             <div class="timeline-item" id="presale1">
@@ -564,11 +559,11 @@
         const usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
         const usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
 
-        // Initialization
-        async function init() {
+        // Connect wallet function
+        async function connectWallet() {
             const status = document.getElementById("status");
             if (!window.ethereum) {
-                status.innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a>!";
+                status.innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> or use a wallet with DApp browser!";
                 return;
             }
             try {
@@ -685,8 +680,6 @@
         // Page load
         window.onload = function() {
             startCountdown();
-            updateProgress();
-            init();
             const timelineItems = document.querySelectorAll('.timeline-item');
             const tokenomicsItems = document.querySelectorAll('.tokenomics-item');
             timelineItems.forEach((item, index) => {
