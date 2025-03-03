@@ -186,24 +186,49 @@
             height: auto;
             opacity: 0.9;
             animation: fallingMoney 4s linear forwards;
+            z-index: 5;
         }
         @keyframes fallingMoney {
             from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
             to { transform: translateY(500px) rotate(360deg); opacity: 0; }
         }
+        .coin {
+            position: absolute;
+            width: 40px;
+            height: auto;
+            opacity: 0.8;
+            animation: fallingCoin 5s linear infinite;
+            z-index: 5;
+        }
+        @keyframes fallingCoin {
+            from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            to { transform: translateY(500px) rotate(720deg); opacity: 0; }
+        }
         .cat {
             position: absolute;
-            width: 100px;
+            width: 100px; /* Bigger cat */
             height: auto;
-            z-index: 5; /* Below container but above background */
-            animation: wander 20s infinite ease-in-out;
+            z-index: 6; /* Above coins and money */
+            animation: wanderCat 15s infinite ease-in-out;
         }
-        @keyframes wander {
-            0% { left: 10%; top: 10%; transform: translate(0, 0); }
-            25% { left: 70%; top: 30%; transform: translate(-50%, -50%) rotate(10deg); }
-            50% { left: 50%; top: 60%; transform: translate(-50%, -50%) rotate(-10deg); }
-            75% { left: 20%; top: 80%; transform: translate(-50%, -50%) rotate(5deg); }
-            100% { left: 10%; top: 10%; transform: translate(0, 0); }
+        @keyframes wanderCat {
+            0% { left: 5%; top: 10%; transform: translate(0, 0) scaleX(1); }
+            25% { left: 60%; top: 20%; transform: translate(-50%, -50%) scaleX(-1); } /* Flip horizontally */
+            50% { left: 40%; top: 50%; transform: translate(-50%, -50%) scaleX(1); }
+            75% { left: 80%; top: 70%; transform: translate(-50%, -50%) scaleX(-1); }
+            100% { left: 5%; top: 10%; transform: translate(0, 0) scaleX(1); }
+        }
+        .emoji {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.7;
+            z-index: 4; /* Below cat */
+            animation: floatEmoji 10s infinite ease-in-out;
+        }
+        @keyframes floatEmoji {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
+            50% { transform: translate(100px, -50px) rotate(180deg); opacity: 1; }
+            100% { transform: translate(0, 0) rotate(360deg); opacity: 0.7; }
         }
         .subscribe input {
             padding: 10px;
@@ -305,6 +330,10 @@
             }
             .cat {
                 width: 60px;
+            }
+            .coin, .emoji {
+                font-size: 30px;
+                width: 30px;
             }
         }
     </style>
@@ -411,12 +440,12 @@
             <a href="https://t.me/CharityPP" target="_blank">Telegram</a>
         </div>
     </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Cat_animated.gif" alt="Wandering Cat" class="cat">
+    <img src="https://cdn.pixabay.com/photo/2017/11/14/13/06/kitty-2948404_1280.jpg" alt="Wandering Cat" class="cat">
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
         function playSound() {
-            const audio = new Audio('beep.wav');
+            const audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-01a.mp3'); // Fun beep sound
             audio.play().catch(error => console.log("Error playing sound:", error));
         }
 
@@ -465,6 +494,30 @@
             money.style.animationDuration = `${Math.random() * 3 + 2}s`;
             document.body.appendChild(money);
             money.addEventListener('animationend', () => money.remove());
+        }
+
+        function createCoin() {
+            if (document.querySelectorAll('.coin').length >= 5) return;
+            const coin = document.createElement("img");
+            coin.classList.add("coin");
+            coin.src = "https://cryptologos.cc/logos/ethereum-eth-logo.png";
+            coin.style.left = `${Math.random() * (window.innerWidth - 40)}px`;
+            coin.style.animationDuration = `${Math.random() * 4 + 3}s`;
+            document.body.appendChild(coin);
+            coin.addEventListener('animationend', () => coin.remove());
+        }
+
+        function createEmoji() {
+            if (document.querySelectorAll('.emoji').length >= 5) return;
+            const emojis = ['🐸', '💰', '🚀', '🌟', '🎉'];
+            const emoji = document.createElement("span");
+            emoji.classList.add("emoji");
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+            emoji.style.top = `${Math.random() * (window.innerHeight - 50)}px`;
+            emoji.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            document.body.appendChild(emoji);
+            emoji.addEventListener('animationend', () => emoji.remove());
         }
 
         function copyAddress() {
@@ -590,6 +643,8 @@
                 }, index * 300);
             });
             setInterval(createMoney, 2000);
+            setInterval(createCoin, 3000);
+            setInterval(createEmoji, 4000);
 
             let infoBox = document.createElement("div");
             infoBox.id = "timelineInfo";
