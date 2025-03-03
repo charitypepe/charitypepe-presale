@@ -13,55 +13,156 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(45deg, #28a745, #218838);
-            animation: backgroundAnimation 5s infinite alternate;
+            background: linear-gradient(120deg, #071a16, #0d2e27, #071a16);
+            background-size: 180% 180%;
+            animation: glossyOil 6s ease-in-out infinite;
             overflow-x: hidden;
             position: relative;
             text-align: center;
         }
-        @keyframes backgroundAnimation {
-            from { background: linear-gradient(45deg, #28a745, #218838); }
-            to { background: linear-gradient(45deg, #218838, #28a745); }
+        @keyframes glossyOil {
+            0% { background-position: 0% 0%; filter: brightness(1); }
+            50% { background-position: 100% 100%; filter: brightness(1.1); }
+            100% { background-position: 0% 0%; filter: brightness(1); }
         }
         .container {
-            background: #004d00;
-            padding: 30px;
+            background: #0d2e27;
+            padding: 40px;
             border-radius: 15px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 900px;
+            width: 95%;
+            max-width: 1400px;
             position: relative;
             z-index: 10;
             opacity: 0;
             animation: fadeIn 1s forwards;
             color: white;
+            margin: 20px auto;
         }
         @keyframes fadeIn {
             to { opacity: 1; }
         }
-        .timeline {
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 32px;
+            color: #2ecc71;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+        .buy-section {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: #0d2e27;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 250px;
+            z-index: 20; /* Ensures it stays above other content */
+        }
+        .buy-item {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .buy-section input {
+            padding: 8px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 700;
+            background: #143d33;
+            color: #fff;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .buy-section input::placeholder {
+            color: #fff;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+        .buy-section button {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+        }
+        .buy-section button:hover {
+            background: #0056b3;
+        }
+        #status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.3);
+            width: 100%;
+            text-align: center;
+        }
+        .success { background: #155724; }
+        .error { background: #721c24; }
+        .processing { background: #856404; }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #007bff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar {
+            margin-top: 20px;
+        }
+        .progress-bar .bar {
+            width: 100%;
+            height: 20px;
+            background: #143d33;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: #007bff;
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+        .timeline, .tokenomics {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 50px 0;
             padding: 30px;
-            background: #004d00;
+            background: #0d2e27;
             border-radius: 15px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
             color: white;
+            margin-top: 70px; /* Moved 5cm (50px) lower */
         }
-        .timeline-item {
+        .timeline-item, .tokenomics-item {
             text-align: center;
-            width: 22%;
+            width: 18%;
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s ease-in-out;
         }
-        .timeline-item span {
+        .timeline-item span, .tokenomics-item span {
             display: block;
             width: 100px;
             height: 100px;
-            background: #004d00;
+            background: #143d33;
             border-radius: 50%;
             border: 5px solid #007bff;
             margin: auto;
@@ -70,17 +171,10 @@
             color: #007bff;
             cursor: pointer;
         }
-        .countdown {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #007bff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .faq, .how-to-buy, .subscribe, .progress-bar, .wallet, .socials, .buy-tokens {
+        .faq, .how-to-buy, .subscribe, .wallet, .socials {
             margin-top: 40px;
             text-align: left;
-            background: #004d00;
+            background: #0d2e27;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -97,35 +191,38 @@
             from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
             to { transform: translateY(500px) rotate(360deg); opacity: 0; }
         }
-        .subscribe input, .buy-tokens input {
+        .subscribe input {
             padding: 10px;
             margin-right: 10px;
             border: 1px solid #007bff;
             border-radius: 5px;
+            font-size: 14px;
+            font-weight: 700;
+            background: #143d33;
+            color: #fff;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
         }
-        .subscribe button, .wallet button, #scrollTop, .buy-tokens button {
+        .subscribe input::placeholder {
+            color: #fff;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+        .subscribe button, .wallet button, #scrollTop {
             padding: 10px 20px;
             background: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-        .subscribe button:hover, .wallet button:hover, #scrollTop:hover, .buy-tokens button:hover {
-            background: #0056b3;
-        }
-        .progress-bar .bar {
+            font-weight: 700;
             width: 100%;
-            height: 20px;
-            background: #004d00;
-            border-radius: 10px;
-            overflow: hidden;
+            max-width: 200px;
+            margin: 10px auto 0 auto;
         }
-        .progress-bar .fill {
-            height: 100%;
-            background: #007bff;
-            width: 60%;
-            transition: width 1s ease-in-out;
+        .subscribe button:hover, .wallet button:hover, #scrollTop:hover {
+            background: #0056b3;
         }
         .socials a {
             margin: 0 10px;
@@ -138,64 +235,128 @@
         }
         #timelineInfo {
             position: fixed;
-            top: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            background: #007bff;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 123, 255, 0.9);
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 70%;
+            max-width: 600px;
+            font-size: 18px;
+            line-height: 1.5;
             display: none;
-            z-index: 100;
+            z-index: 200;
+            text-align: center;
         }
         @media (max-width: 768px) {
-            .timeline {
+            .timeline, .tokenomics {
                 flex-direction: column;
                 padding: 15px;
             }
-            .timeline-item {
+            .timeline-item, .tokenomics-item {
                 width: 100%;
                 margin-bottom: 20px;
                 opacity: 1;
                 transform: none;
             }
-            .timeline-item span {
+            .timeline-item span, .tokenomics-item span {
                 width: 80px;
                 height: 80px;
                 line-height: 80px;
                 font-size: 30px;
+            }
+            .buy-section {
+                position: static;
+                width: 100%;
+                margin-top: 20px;
+                align-items: center;
+            }
+            .buy-item {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            .container {
+                width: 100%;
+                padding: 20px;
+            }
+            #timelineInfo {
+                width: 90%;
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="logo.png" alt="Charity PEPE Logo" style="margin-bottom: 20px; max-width: 300px;">
         <h1>Charity PEPE (CPEPE) Presale</h1>
+        <img src="logo.png" alt="Charity PEPE Logo" class="logo">
+        <div class="buy-section">
+            <div class="buy-item">
+                <input type="number" id="ethAmount" placeholder="ETH Amount" step="0.001">
+                <button onclick="buyWithETH()">Buy with ETH</button>
+            </div>
+            <div class="buy-item">
+                <input type="number" id="usdtAmount" placeholder="USDT Amount" step="1">
+                <button onclick="buyWithUSDT()">Buy with USDT</button>
+            </div>
+            <div class="buy-item">
+                <input type="number" id="usdcAmount" placeholder="USDC Amount" step="1">
+                <button onclick="buyWithUSDC()">Buy with USDC</button>
+            </div>
+            <p id="status">Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!</p>
+        </div>
         <div class="countdown" id="countdown">Loading...</div>
         <div class="progress-bar">
             <h2>Presale Progress</h2>
             <div class="bar">
                 <div class="fill" id="progressFill"></div>
             </div>
-            <p id="soldTokens">0 / 800,000,000,000 CPEPE sold</p>
+            <p id="progressText">0% of tokens sold (0 / 200,000,000,000 CPEPE)</p>
         </div>
         <div class="timeline">
-            <div class="timeline-item" id="presale">
+            <div class="timeline-item" id="presale1">
                 <span>📅</span>
-                <p>Presale</p>
+                <p>Presale Stage 1</p>
+            </div>
+            <div class="timeline-item" id="presale2">
+                <span>📅</span>
+                <p>Presale Stage 2</p>
             </div>
             <div class="timeline-item" id="liquidity">
                 <span>💰</span>
-                <p>Liquidity Pool</p>
+                <p>Liquidity Launch</p>
             </div>
-            <div class="timeline-item" id="transfers">
-                <span>🔓</span>
-                <p>Transfer Unlock</p>
+            <div class="timeline-item" id="marketCap">
+                <span>🚀</span>
+                <p>Market Cap Goal</p>
             </div>
-            <div class="timeline-item" id="voting">
-                <span>🗳️</span>
-                <p>Voting for Donations</p>
+        </div>
+        <div class="tokenomics">
+            <div class="tokenomics-item" id="reserve">
+                <span>🏦</span>
+                <p>Reserve</p>
+            </div>
+            <div class="tokenomics-item" id="presale">
+                <span>📈</span>
+                <p>Presale</p>
+            </div>
+            <div class="tokenomics-item" id="publicSale">
+                <span>🌍</span>
+                <p>Public Sale</p>
+            </div>
+            <div class="tokenomics-item" id="marketing">
+                <span>📣</span>
+                <p>Marketing</p>
+            </div>
+            <div class="tokenomics-item" id="team">
+                <span>👥</span>
+                <p>Team</p>
             </div>
         </div>
         <div class="how-to-buy">
@@ -207,28 +368,16 @@
                 <li>Wait for the transaction to complete.</li>
             </ol>
         </div>
-        <div class="buy-tokens">
-            <h2>Buy CPEPE Tokens</h2>
-            <button id="connectWallet">Connect Wallet</button>
-            <p id="walletStatus">Wallet not connected</p>
-            <input type="number" id="tokenAmount" placeholder="Enter CPEPE amount" style="margin-top: 10px;" min="1">
-            <select id="currencySelect">
-                <option value="ETH">ETH</option>
-                <option value="USDT">USDT</option>
-                <option value="USDC">USDC</option>
-            </select>
-            <button id="buyButton" disabled>Buy Tokens</button>
-            <p id="purchaseStatus"></p>
-        </div>
         <div class="wallet">
             <h2>Presale Wallet Address</h2>
-            <p id="walletAddress">0x1234...5678</p>
+            <p id="walletAddress">0xAD2128444D175835075F017263deB7fece25c881</p>
             <button onclick="copyAddress()">Copy Address</button>
         </div>
         <div class="faq">
             <h2>Frequently Asked Questions</h2>
-            <p><strong>When will the presale end?</strong> - December 31, 2025</p>
-            <p><strong>How do I stake my CPEPE?</strong> - Staking will be available after the presale.</p>
+            <p><strong>When will the presale end?</strong> - January 1, 2026</p>
+            <p><strong>How do I stake my CPEPE?</strong> - Staking will be available after January 2026.</p>
+            <p><strong>What is the target market cap?</strong> - $2 billion by March 2026.</p>
         </div>
         <div class="subscribe">
             <h2>Subscribe for Updates</h2>
@@ -246,116 +395,47 @@
         </div>
     </div>
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
-        const CONTRACT_ADDRESS = "0xYourSmartContractAddress"; // Замени с адреса на деплоения договор
-        const CONTRACT_ABI = [
-            {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"buyTokensWithETH","outputs":[],"stateMutability":"payable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"buyTokensWithUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"buyTokensWithUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[],"name":"presaleSold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"PRESALE_START_PERIOD_1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"PRESALE_END_PERIOD_3","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"string","name":"tokenUsed","type":"string"},{"indexed":false,"internalType":"uint256","name":"tokenAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"}
-        ];
-        const USDT_ADDRESS = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        const USDC_ADDRESS = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-        const ERC20_ABI = [
-            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}
-        ];
-
-        let web3;
-        let accounts;
-        let contract;
-
-        document.getElementById("connectWallet").addEventListener("click", connectWallet);
-        document.getElementById("buyButton").addEventListener("click", buyTokens);
-
-        async function connectWallet() {
-            if (!window.ethereum) {
-                alert("Please install MetaMask!");
-                return;
-            }
-            web3 = new Web3(window.ethereum);
-            try {
-                accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                document.getElementById("walletStatus").innerText = `Connected: ${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
-                contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-                document.getElementById("buyButton").disabled = false;
-                updatePresaleInfo();
-            } catch (error) {
-                console.log("Error connecting wallet:", error);
-                document.getElementById("walletStatus").innerText = "Failed to connect wallet";
-            }
-        }
-
-        async function buyTokens() {
-            const amount = document.getElementById("tokenAmount").value;
-            const currency = document.getElementById("currencySelect").value;
-            if (!amount || !accounts || amount <= 0) {
-                alert("Please enter a valid amount and connect wallet!");
-                return;
-            }
-
-            const amountWei = web3.utils.toWei(amount, 'ether');
-            document.getElementById("purchaseStatus").innerText = "Processing...";
-
-            try {
-                if (currency === "ETH") {
-                    const now = Math.floor(Date.now() / 1000);
-                    let ethPrice;
-                    if (now <= 1753910399) ethPrice = 450000000;
-                    else if (now <= 1759257599) ethPrice = 350000000;
-                    else ethPrice = 250000000;
-                    const ethCost = web3.utils.toWei((amount / ethPrice).toString(), 'ether');
-
-                    await contract.methods.buyTokensWithETH(amountWei).send({
-                        from: accounts[0],
-                        value: ethCost
-                    });
-                } else if (currency === "USDT") {
-                    const usdtCost = web3.utils.toWei((amount / 2222).toString(), 'mwei'); // 6 decimals
-                    const usdtContract = new web3.eth.Contract(ERC20_ABI, USDT_ADDRESS);
-                    await usdtContract.methods.approve(CONTRACT_ADDRESS, usdtCost).send({ from: accounts[0] });
-                    await contract.methods.buyTokensWithUSDT(amountWei).send({ from: accounts[0] });
-                } else if (currency === "USDC") {
-                    const usdcCost = web3.utils.toWei((amount / 2222).toString(), 'mwei'); // 6 decimals
-                    const usdcContract = new web3.eth.Contract(ERC20_ABI, USDC_ADDRESS);
-                    await usdcContract.methods.approve(CONTRACT_ADDRESS, usdcCost).send({ from: accounts[0] });
-                    await contract.methods.buyTokensWithUSDC(amountWei).send({ from: accounts[0] });
-                }
-                document.getElementById("purchaseStatus").innerText = "Purchase successful!";
-                updatePresaleInfo();
-            } catch (error) {
-                console.log("Error buying tokens:", error);
-                document.getElementById("purchaseStatus").innerText = "Purchase failed: " + error.message;
-            }
-        }
-
         function playSound() {
             const audio = new Audio('beep.wav');
             audio.play().catch(error => console.log("Error playing sound:", error));
         }
 
         function startCountdown() {
-            const endDate = new Date("December 31, 2025 23:59:59").getTime();
+            const endDate = new Date("January 1, 2026 23:59:59").getTime();
             const countdownElement = document.getElementById("countdown");
-            if (!countdownElement) return;
+            if (!countdownElement) {
+                console.log("Countdown element not found!");
+                return;
+            }
             const interval = setInterval(() => {
                 const now = new Date().getTime();
                 const timeLeft = endDate - now;
                 if (timeLeft <= 0) {
-                    countdownElement.innerHTML = "Presale has ended!";
+                    countdownElement.innerHTML = "Presale Stage 2 has ended!";
                     clearInterval(interval);
-                    document.getElementById("buyButton").disabled = true;
                     return;
                 }
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                countdownElement.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                countdownElement.innerHTML = `Time left for Presale Stage 2: ${days}d ${hours}h ${minutes}m ${seconds}s`;
             }, 1000);
+        }
+
+        function updateProgress() {
+            const now = new Date().getTime();
+            const startStage1 = new Date("March 7, 2025").getTime();
+            const endStage2 = new Date("January 1, 2026").getTime();
+            const totalTokens = 200000000000;
+            const presaleDays = (endStage2 - startStage1) / (1000 * 60 * 60 * 24);
+            const daysPassed = (now - startStage1) / (1000 * 60 * 60 * 24);
+            const progress = Math.min(Math.max((daysPassed / presaleDays) * 100, 0), 100);
+            const tokensSold = Math.floor(totalTokens * (progress / 100));
+            document.getElementById("progressFill").style.width = `${progress}%`;
+            document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${tokensSold.toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
         }
 
         function createMoney() {
@@ -376,18 +456,116 @@
             });
         }
 
-        async function updatePresaleInfo() {
-            if (!contract) return;
-            const sold = await contract.methods.presaleSold().call();
-            const soldFormatted = web3.utils.fromWei(sold, 'ether');
-            document.getElementById("soldTokens").innerText = `${soldFormatted} / 800,000,000,000 CPEPE sold`;
-            document.getElementById("progressFill").style.width = `${(soldFormatted / 800000000000) * 100}%`;
+        const web3 = new Web3(window.ethereum);
+        const contractAddress = "0xAD2128444D175835075F017263deB7fece25c881";
+        const contractABI = [
+            {"name": "buyWithETH", "type": "function", "stateMutability": "payable", "inputs": [], "outputs": []},
+            {"name": "buyWithUSDT", "type": "function", "stateMutability": "nonpayable", "inputs": [{"name": "amount", "type": "uint256"}], "outputs": []},
+            {"name": "buyWithUSDC", "type": "function", "stateMutability": "nonpayable", "inputs": [{"name": "amount", "type": "uint256"}], "outputs": []}
+        ];
+        const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+        const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+        const erc20ABI = [
+            {"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"type":"function"}
+        ];
+
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+        const usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
+        const usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
+
+        async function init() {
+            if (!window.ethereum) {
+                document.getElementById("status").innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!";
+                return;
+            }
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            document.getElementById("status").innerText = "Connected!";
+        }
+
+        async function buyWithETH() {
+            const ethAmount = document.getElementById("ethAmount").value;
+            if (!ethAmount || ethAmount <= 0) {
+                alert("Enter a valid ETH amount!");
+                return;
+            }
+            const accounts = await web3.eth.getAccounts();
+            const weiAmount = web3.utils.toWei(ethAmount, "ether");
+            const status = document.getElementById("status");
+            status.className = "processing";
+            status.innerText = "Processing...";
+            try {
+                const tx = await contract.methods.buyWithETH().send({
+                    from: accounts[0],
+                    value: weiAmount,
+                    gas: 300000
+                });
+                status.className = "success";
+                status.innerText = `Success! Tx: ${tx.transactionHash}`;
+            } catch (error) {
+                status.className = "error";
+                status.innerText = "Error: " + error.message;
+            }
+        }
+
+        async function buyWithUSDT() {
+            const usdtAmount = document.getElementById("usdtAmount").value;
+            if (!usdtAmount || usdtAmount <= 0) {
+                alert("Enter a valid USDT amount!");
+                return;
+            }
+            const accounts = await web3.eth.getAccounts();
+            const weiAmount = web3.utils.toWei(usdtAmount, "mwei");
+            const status = document.getElementById("status");
+            status.className = "processing";
+            status.innerText = "Approving USDT...";
+            try {
+                await usdtContract.methods.approve(contractAddress, weiAmount).send({ from: accounts[0], gas: 100000 });
+                status.innerText = "Processing...";
+                const tx = await contract.methods.buyWithUSDT(weiAmount).send({ from: accounts[0], gas: 400000 });
+                status.className = "success";
+                status.innerText = `Success! Tx: ${tx.transactionHash}`;
+            } catch (error) {
+                status.className = "error";
+                status.innerText = "Error: " + error.message;
+            }
+        }
+
+        async function buyWithUSDC() {
+            const usdcAmount = document.getElementById("usdcAmount").value;
+            if (!usdcAmount || usdcAmount <= 0) {
+                alert("Enter a valid USDC amount!");
+                return;
+            }
+            const accounts = await web3.eth.getAccounts();
+            const weiAmount = web3.utils.toWei(usdcAmount, "mwei");
+            const status = document.getElementById("status");
+            status.className = "processing";
+            status.innerText = "Approving USDC...";
+            try {
+                await usdcContract.methods.approve(contractAddress, weiAmount).send({ from: accounts[0], gas: 100000 });
+                status.innerText = "Processing...";
+                const tx = await contract.methods.buyWithUSDC(weiAmount).send({ from: accounts[0], gas: 400000 });
+                status.className = "success";
+                status.innerText = `Success! Tx: ${tx.transactionHash}`;
+            } catch (error) {
+                status.className = "error";
+                status.innerText = "Error: " + error.message;
+            }
         }
 
         window.onload = function() {
             startCountdown();
+            updateProgress();
+            init();
             const timelineItems = document.querySelectorAll('.timeline-item');
+            const tokenomicsItems = document.querySelectorAll('.tokenomics-item');
             timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
+            tokenomicsItems.forEach((item, index) => {
                 setTimeout(() => {
                     item.style.opacity = '1';
                     item.style.transform = 'translateY(0)';
@@ -399,7 +577,7 @@
             infoBox.id = "timelineInfo";
             document.body.appendChild(infoBox);
 
-            const timelineSpans = document.querySelectorAll('.timeline-item span');
+            const timelineSpans = document.querySelectorAll('.timeline-item span, .tokenomics-item span');
             if (timelineSpans.length === 0) {
                 console.log("Timeline spans not found!");
             } else {
@@ -407,10 +585,15 @@
                     span.addEventListener('click', function() {
                         playSound();
                         const info = {
-                            presale: "Presale starts now and ends on Dec 31, 2025.",
-                            liquidity: "Liquidity pool will be locked after presale.",
-                            transfers: "Transfers unlock after liquidity is added.",
-                            voting: "Vote for charities starting Jan 2026."
+                            presale1: "Presale Stage 1: March 7, 2025 - July 30, 2025. Price: $0.0001. 100B CPEPE available.",
+                            presale2: "Presale Stage 2: July 30, 2025 - January 1, 2026. Price: $0.0002. 100B CPEPE available.",
+                            liquidity: "Liquidity Launch: January 2, 2026 with $15M from presale funds.",
+                            marketCap: "Market Cap Goal: $2B by March 2026.",
+                            reserve: "Reserve Fund: 40% (400B CPEPE) for liquidity, staking, and future plans.",
+                            presale: "Presale: 20% (200B CPEPE) + 1.5% bonus (15B CPEPE from Reserve).",
+                            publicSale: "Public Sale: 20% (200B CPEPE) for broad distribution.",
+                            marketing: "Marketing & Partnerships: 15% (150B CPEPE) for promotion and growth.",
+                            team: "Team & Founders: 5% (50B CPEPE), locked for 2 years."
                         };
                         const id = this.parentElement.id;
                         if (info[id]) {
@@ -418,7 +601,7 @@
                             infoBox.style.display = "block";
                             setTimeout(() => {
                                 infoBox.style.display = "none";
-                            }, 3000);
+                            }, 5000);
                         } else {
                             console.log("No info for ID:", id);
                         }
