@@ -108,6 +108,15 @@
             color: #007bff;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
+        .presale-info {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+        }
+        .presale-info p {
+            margin: 5px 0;
+        }
         .progress-bar {
             margin-top: 20px;
             background: #132804;
@@ -350,6 +359,11 @@
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
         <div class="countdown" id="countdown">Loading...</div>
+        <div class="presale-info">
+            <p>Presale, buy now at $0.0001 for 1 CPEPE Token</p>
+            <p>Presale Stage 1: March 7, 2025, 20:00 UTC - July 30, 2025, 20:00 UTC</p>
+            <p>Token Contract: <span id="tokenContract">0xAD2128444D175835075F017263deB7fece25c881</span></p>
+        </div>
         <div class="progress-bar">
             <h2>Presale Progress</h2>
             <div class="bar">
@@ -457,22 +471,40 @@
     <script>
         // Countdown
         function startCountdown() {
-            const endDate = new Date("January 1, 2026 23:59:59").getTime();
+            const stage1Start = new Date("March 7, 2025 20:00:00 UTC").getTime();
+            const stage1End = new Date("July 30, 2025 20:00:00 UTC").getTime();
+            const stage2End = new Date("January 1, 2026 23:59:59 UTC").getTime();
             const countdownElement = document.getElementById("countdown");
             if (!countdownElement) return;
+
             const interval = setInterval(() => {
                 const now = new Date().getTime();
-                const timeLeft = endDate - now;
-                if (timeLeft <= 0) {
+
+                if (now < stage1Start) {
+                    const timeLeft = stage1Start - now;
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    countdownElement.innerHTML = `Presale Stage 1 starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                } else if (now >= stage1Start && now <= stage1End) {
+                    const timeLeft = stage1End - now;
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    countdownElement.innerHTML = `Presale Stage 1 ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                } else if (now > stage1End && now <= stage2End) {
+                    const timeLeft = stage2End - now;
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    countdownElement.innerHTML = `Presale Stage 2 ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                } else {
                     countdownElement.innerHTML = "The presale has ended!";
                     clearInterval(interval);
-                    return;
                 }
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                countdownElement.innerHTML = `Time remaining for Stage 2: ${days}d ${hours}h ${minutes}m ${seconds}s`;
             }, 1000);
         }
 
