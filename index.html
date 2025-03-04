@@ -475,7 +475,7 @@
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
-    <script src="https://unpkg.com/@walletconnect/ethereum-provider@2.13.0/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.13.0/dist/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
     
     <script>
@@ -630,28 +630,30 @@
             qrCodeContainer.innerHTML = "";
             try {
                 console.log("Attempting to connect WalletConnect...");
-                const provider = new window.EthereumProvider({
+                if (typeof EthereumProvider === 'undefined') {
+                    throw new Error("EthereumProvider not loaded. Please ensure the library is included.");
+                }
+                const provider = new EthereumProvider({
                     chainId: 1,
                     rpc: { 1: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161" }
                 });
                 console.log("WalletConnect provider created:", provider);
 
-                provider.on("uri", (uri) => {
-                    console.log("WalletConnect URI:", uri);
-                    qrCodeContainer.style.display = "block";
-                    QRCode.toCanvas(qrCodeContainer.appendChild(document.createElement("canvas")), uri, { width: 200 }, (error) => {
-                        if (error) {
-                            console.error("QR Code generation error:", error);
-                            status.className = "error";
-                            status.innerText = "Failed to generate QR code!";
-                            qrCodeContainer.style.display = "none";
-                            return;
-                        }
-                        console.log("QR Code generated successfully");
-                    });
+                await provider.enable();
+                const uri = provider.wc.uri; // Използваме wc.uri за достъп до URI-то
+                console.log("WalletConnect URI:", uri);
+                qrCodeContainer.style.display = "block";
+                QRCode.toCanvas(qrCodeContainer.appendChild(document.createElement("canvas")), uri, { width: 200 }, (error) => {
+                    if (error) {
+                        console.error("QR Code generation error:", error);
+                        status.className = "error";
+                        status.innerText = "Failed to generate QR code!";
+                        qrCodeContainer.style.display = "none";
+                        return;
+                    }
+                    console.log("QR Code generated successfully");
                 });
 
-                await provider.enable();
                 web3 = new Web3(provider);
                 contract = new web3.eth.Contract(contractABI, contractAddress);
                 usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
@@ -735,15 +737,15 @@
         }
 
         async function buyWithUSDC() {
-            const usdtAmount = document.getElementById("usdcAmount").value;
+            const usdcAmount = document.getElementById("usdcAmount").value;
             const status = document.getElementById("status");
-            if (!usdtAmount || usdtAmount <= 0) {
+            if (!usdcAmount || usdcAmount <= 0) {
                 alert("Please enter a valid USDC amount!");
                 return;
             }
             try {
                 const accounts = await web3.eth.getAccounts();
-                const weiAmount = web3.utils.toWei(usdtAmount, "mwei");
+                const weiAmount = web3.utils.toWei(usdcAmount, "mwei");
                 status.className = "processing";
                 status.innerText = "Approving USDC...";
                 await usdcContract.methods.approve(contractAddress, weiAmount).send({
