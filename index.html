@@ -475,7 +475,7 @@
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
     
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.13.0/dist/index.min.js"></script>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
     
     <script>
@@ -630,17 +630,18 @@
             qrCodeContainer.innerHTML = "";
             try {
                 console.log("Attempting to connect WalletConnect...");
-                if (typeof EthereumProvider === 'undefined') {
-                    throw new Error("EthereumProvider not loaded. Please ensure the library is included.");
+                if (!window.WalletConnectProvider) {
+                    throw new Error("WalletConnectProvider not loaded. Please ensure the library is included.");
                 }
-                const provider = new EthereumProvider({
-                    chainId: 1,
-                    rpc: { 1: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161" }
+                const provider = new window.WalletConnectProvider({
+                    rpc: { 1: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161" },
+                    chainId: 1
                 });
                 console.log("WalletConnect provider created:", provider);
 
                 await provider.enable();
-                const uri = provider.wc.uri; // Използваме wc.uri за достъп до URI-то
+                console.log("WalletConnect enabled");
+                const uri = provider.connector.uri;
                 console.log("WalletConnect URI:", uri);
                 qrCodeContainer.style.display = "block";
                 QRCode.toCanvas(qrCodeContainer.appendChild(document.createElement("canvas")), uri, { width: 200 }, (error) => {
