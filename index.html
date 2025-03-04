@@ -35,16 +35,6 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
-        .logo {
-            position: absolute;
-            left: 100px; /* 10 см от левия ръб */
-            top: 10px; /* 1 см от горния таван */
-            width: 150px; /* По-голямо лого */
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 30; /* Над другите елементи */
-        }
         h1 {
             font-size: 32px;
             color: #2ecc71;
@@ -52,33 +42,32 @@
             text-align: center;
         }
         .buy-section {
-            position: fixed;
-            top: 10px;
-            right: 10px;
             background: #132804;
             padding: 15px;
-            border-radius: 0 0 10px 10px;
+            border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            width: 250px;
+            align-items: center;
+            width: 300px;
+            margin: 20px auto;
             z-index: 20;
         }
         .buy-item {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             width: 100%;
         }
         .buy-section input {
-            padding: 8px;
+            padding: 12px;
             border: 1px solid #007bff;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 700;
             background: #143d33;
             color: #fff;
             width: 100%;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
         .buy-section input::placeholder {
             color: #fff;
@@ -86,7 +75,7 @@
             opacity: 0.8;
         }
         .buy-section button {
-            padding: 8px 15px;
+            padding: 12px 15px;
             background: #007bff;
             color: white;
             border: none;
@@ -94,6 +83,7 @@
             cursor: pointer;
             font-weight: 700;
             width: 100%;
+            font-size: 18px;
         }
         .buy-section button:hover {
             background: #0056b3;
@@ -321,13 +311,7 @@
                 font-size: 30px;
             }
             .buy-section {
-                width: 200px;
-                right: 10px;
-            }
-            .logo {
-                width: 120px; /* Леко намален размер за мобилни устройства */
-                left: 100px; /* Остава на 10 см от левия ръб */
-                top: 10px; /* Остава на 1 см от горния таван */
+                width: 250px;
             }
             .buy-item {
                 width: 100%;
@@ -351,12 +335,28 @@
                 font-size: 30px;
                 width: 30px;
             }
+            .buy-section input {
+                padding: 10px;
+                font-size: 16px;
+            }
+            .buy-section button {
+                padding: 10px 15px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
+        <div class="countdown" id="countdown">Loading...</div>
+        <div class="progress-bar">
+            <h2>Presale Progress</h2>
+            <div class="bar">
+                <div class="fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">0% of tokens sold (0 / 200,000,000,000 CPEPE)</p>
+        </div>
         <div class="buy-section">
             <div class="buy-item">
                 <input type="number" id="ethAmount" placeholder="Enter ETH Amount" step="0.001">
@@ -371,15 +371,6 @@
                 <button onclick="buyWithUSDC()">Buy with USDC</button>
             </div>
             <p id="status">Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!</p>
-        </div>
-        <img src="https://raw.githubusercontent.com/charitypepe/charitypepe-presale/main/myfrog_large.png" alt="Charity PEPE Logo" class="logo">
-        <div class="countdown" id="countdown">Loading...</div>
-        <div class="progress-bar">
-            <h2>Presale Progress</h2>
-            <div class="bar">
-                <div class="fill" id="progressFill"></div>
-            </div>
-            <p id="progressText">0% of tokens sold (0 / 200,000,000,000 CPEPE)</p>
         </div>
         <div class="timeline">
             <div class="timeline-item" id="presale1">
