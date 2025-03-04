@@ -35,6 +35,16 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
+        .logo {
+            position: absolute;
+            left: 100px; /* 10 см от левия ръб */
+            top: 10px; /* 1 см от горния таван */
+            width: 150px; /* По-голямо лого */
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 30; /* Над другите елементи */
+        }
         h1 {
             font-size: 32px;
             color: #2ecc71;
@@ -42,27 +52,25 @@
             text-align: center;
         }
         .buy-section {
+            position: fixed;
+            top: 10px;
+            right: 10px;
             background: #132804;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 0 0 10px 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
+            align-items: flex-end;
+            width: 250px;
             z-index: 20;
         }
         .buy-item {
             margin-bottom: 10px;
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .buy-section input {
-            padding: 16px;
+            padding: 8px;
             border: 1px solid #007bff;
             border-radius: 5px;
             font-size: 14px;
@@ -70,8 +78,6 @@
             background: #143d33;
             color: #fff;
             width: 100%;
-            height: 50px;
-            box-sizing: border-box;
             margin-bottom: 5px;
         }
         .buy-section input::placeholder {
@@ -80,7 +86,7 @@
             opacity: 0.8;
         }
         .buy-section button {
-            padding: 16px 15px;
+            padding: 8px 15px;
             background: #007bff;
             color: white;
             border: none;
@@ -88,33 +94,9 @@
             cursor: pointer;
             font-weight: 700;
             width: 100%;
-            height: 50px;
-            box-sizing: border-box;
         }
         .buy-section button:hover {
             background: #0056b3;
-        }
-        #connectButton {
-            margin-top: 10px;
-            background: #2ecc71;
-        }
-        #connectButton:hover {
-            background: #27ae60;
-        }
-        #walletConnectButton {
-            margin-top: 10px;
-            background: #e67e22;
-        }
-        #walletConnectButton:hover {
-            background: #d35400;
-        }
-        #qrCodeContainer {
-            margin-top: 10px;
-            display: none;
-        }
-        #qrCodeContainer canvas {
-            width: 200px;
-            height: 200px;
         }
         #status {
             margin-top: 10px;
@@ -339,8 +321,17 @@
                 font-size: 30px;
             }
             .buy-section {
-                width: 90%;
-                max-width: 300px;
+                width: 200px;
+                right: 10px;
+            }
+            .logo {
+                width: 120px; /* Леко намален размер за мобилни устройства */
+                left: 100px; /* Остава на 10 см от левия ръб */
+                top: 10px; /* Остава на 1 см от горния таван */
+            }
+            .buy-item {
+                width: 100%;
+                margin-bottom: 10px;
             }
             .container {
                 width: 100%;
@@ -366,14 +357,6 @@
 <body>
     <div class="container">
         <h1>Charity PEPE (CPEPE) Presale</h1>
-        <div class="countdown" id="countdown">Loading...</div>
-        <div class="progress-bar">
-            <h2>Presale Progress</h2>
-            <div class="bar">
-                <div class="fill" id="progressFill"></div>
-            </div>
-            <p id="progressText">0% of tokens sold (0 / 200,000,000,000 CPEPE)</p>
-        </div>
         <div class="buy-section">
             <div class="buy-item">
                 <input type="number" id="ethAmount" placeholder="Enter ETH Amount" step="0.001">
@@ -387,10 +370,16 @@
                 <input type="number" id="usdcAmount" placeholder="Enter USDC Amount" step="1">
                 <button onclick="buyWithUSDC()">Buy with USDC</button>
             </div>
-            <p id="status">Please connect your wallet to buy CPEPE!</p>
-            <button id="connectButton" onclick="connectMetaMask()">Connect MetaMask</button>
-            <button id="walletConnectButton" onclick="connectWalletConnect()">WalletConnect</button>
-            <div id="qrCodeContainer"></div>
+            <p id="status">Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!</p>
+        </div>
+        <img src="https://raw.githubusercontent.com/charitypepe/charitypepe-presale/main/myfrog_large.png" alt="Charity PEPE Logo" class="logo">
+        <div class="countdown" id="countdown">Loading...</div>
+        <div class="progress-bar">
+            <h2>Presale Progress</h2>
+            <div class="bar">
+                <div class="fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">0% of tokens sold (0 / 200,000,000,000 CPEPE)</p>
         </div>
         <div class="timeline">
             <div class="timeline-item" id="presale1">
@@ -473,22 +462,9 @@
     </div>
     <img src="https://cdn.pixabay.com/photo/2018/03/27/21/22/eyes-3267160_1280.png" alt="Blinking Eyes" class="eyes">
     <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
-    
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
-    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
-    
     <script>
-        let web3;
-        const contractAddress = "0xAD2128444D175835075F017263deB7fece25c881";
-        const contractABI = [{"inputs":[],"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalAmount","type":"uint256"}],"name":"Airdrop","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ETHWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"period","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"string","name":"currency","type":"string"}],"name":"TokensPurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDCWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDTWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"airdrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyWithETH","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdcAmount","type":"uint256"}],"name":"buyWithUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdtAmount","type":"uint256"}],"name":"buyWithUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"period","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tokensSold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-        const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-        const erc20ABI = [
-            {"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"type":"function"},
-            {"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"type":"function"}
-        ];
-
+        // Countdown
         function startCountdown() {
             const endDate = new Date("January 1, 2026 23:59:59").getTime();
             const countdownElement = document.getElementById("countdown");
@@ -509,11 +485,11 @@
             }, 1000);
         }
 
-        async function updateProgress(web3Instance) {
+        // Progress bar update with real contract data
+        async function updateProgress() {
             try {
-                const totalTokens = 200000000000;
-                const contractInstance = new web3Instance.eth.Contract(contractABI, contractAddress);
-                const tokensSold = await contractInstance.methods.tokensSold().call();
+                const totalTokens = 200000000000; // 200 billion for presale
+                const tokensSold = await contract.methods.tokensSold().call();
                 const progress = (tokensSold / totalTokens) * 100;
                 document.getElementById("progressFill").style.width = `${progress}%`;
                 document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${Number(tokensSold).toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
@@ -532,6 +508,7 @@
             }
         }
 
+        // Animations
         function createMoney() {
             if (document.querySelectorAll('.money').length >= 10) return;
             const money = document.createElement("img");
@@ -567,117 +544,52 @@
             emoji.addEventListener('animationend', () => emoji.remove());
         }
 
+        // Copy address
         function copyAddress() {
             const address = document.getElementById("walletAddress").innerText;
             navigator.clipboard.writeText(address).then(() => alert("Address copied!"));
         }
 
-        function loadTimelineAndTokenomics() {
-            console.log("Loading timeline and tokenomics...");
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            const tokenomicsItems = document.querySelectorAll('.tokenomics-item');
-            timelineItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                    console.log(`Timeline item ${index} loaded`);
-                }, index * 300);
-            });
-            tokenomicsItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                    console.log(`Tokenomics item ${index} loaded`);
-                }, index * 300);
-            });
-        }
+        // Web3 setup
+        const web3 = new Web3(window.ethereum);
+        const contractAddress = "0xAD2128444D175835075F017263deB7fece25c881";
+        const contractABI = [{"inputs":[],"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalAmount","type":"uint256"}],"name":"Airdrop","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ETHWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"period","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"string","name":"currency","type":"string"}],"name":"TokensPurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDCWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDTWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"airdrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyWithETH","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdcAmount","type":"uint256"}],"name":"buyWithUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdtAmount","type":"uint256"}],"name":"buyWithUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"period","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tokensSold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+        const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // USDT Mainnet
+        const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; // USDC Mainnet
+        const erc20ABI = [
+            {"constant": false, "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}], "name": "approve", "outputs": [{"name": "", "type": "bool"}], "type": "function"},
+            {"constant": true, "inputs": [{"name": "account", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}
+        ];
 
-        async function connectMetaMask() {
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+        const usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
+        const usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
+
+        // Initialization
+        async function init() {
             const status = document.getElementById("status");
             if (!window.ethereum) {
                 status.innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a>!";
-                console.log("window.ethereum is not available");
                 return;
             }
             try {
-                console.log("Attempting to connect MetaMask...");
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
-                web3 = new Web3(window.ethereum);
-                contract = new web3.eth.Contract(contractABI, contractAddress);
-                usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
-                usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
                 const networkId = await web3.eth.net.getId();
-                console.log("MetaMask Network ID:", networkId);
                 if (networkId !== 1) {
                     status.className = "error";
                     status.innerText = "Please switch to Ethereum Mainnet!";
                     return;
                 }
                 status.className = "success";
-                status.innerText = "Connected to MetaMask!";
-                updateProgress(web3);
+                status.innerText = "Connected to the network!";
+                updateProgress();
             } catch (error) {
                 status.className = "error";
-                status.innerText = "MetaMask connection error: " + error.message;
-                console.log("MetaMask connection error:", error);
+                status.innerText = "Connection error: " + error.message;
             }
         }
 
-        async function connectWalletConnect() {
-            console.log("ConnectWalletConnect function called");
-            const status = document.getElementById("status");
-            const qrCodeContainer = document.getElementById("qrCodeContainer");
-            qrCodeContainer.innerHTML = "";
-            try {
-                console.log("Attempting to connect WalletConnect...");
-                if (!window.WalletConnectProvider) {
-                    throw new Error("WalletConnectProvider not loaded. Please ensure the library is included.");
-                }
-                const provider = new window.WalletConnectProvider({
-                    rpc: { 1: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161" },
-                    chainId: 1
-                });
-                console.log("WalletConnect provider created:", provider);
-
-                await provider.enable();
-                console.log("WalletConnect enabled");
-                const uri = provider.connector.uri;
-                console.log("WalletConnect URI:", uri);
-                qrCodeContainer.style.display = "block";
-                QRCode.toCanvas(qrCodeContainer.appendChild(document.createElement("canvas")), uri, { width: 200 }, (error) => {
-                    if (error) {
-                        console.error("QR Code generation error:", error);
-                        status.className = "error";
-                        status.innerText = "Failed to generate QR code!";
-                        qrCodeContainer.style.display = "none";
-                        return;
-                    }
-                    console.log("QR Code generated successfully");
-                });
-
-                web3 = new Web3(provider);
-                contract = new web3.eth.Contract(contractABI, contractAddress);
-                usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
-                usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
-                const networkId = await web3.eth.net.getId();
-                console.log("WalletConnect Network ID:", networkId);
-                if (networkId !== 1) {
-                    status.className = "error";
-                    status.innerText = "Please switch to Ethereum Mainnet in your wallet!";
-                    return;
-                }
-                status.className = "success";
-                status.innerText = "Connected via WalletConnect!";
-                qrCodeContainer.style.display = "none";
-                updateProgress(web3);
-            } catch (error) {
-                status.className = "error";
-                status.innerText = "WalletConnect error: " + error.message;
-                console.log("WalletConnect error:", error);
-                qrCodeContainer.style.display = "none";
-            }
-        }
-
+        // Buy with ETH
         async function buyWithETH() {
             const ethAmount = document.getElementById("ethAmount").value;
             const status = document.getElementById("status");
@@ -698,13 +610,14 @@
                 });
                 status.className = "success";
                 status.innerText = `Success! Transaction: ${tx.transactionHash}`;
-                updateProgress(web3);
+                updateProgress();
             } catch (error) {
                 status.className = "error";
                 status.innerText = "Error: " + error.message;
             }
         }
 
+        // Buy with USDT
         async function buyWithUSDT() {
             const usdtAmount = document.getElementById("usdtAmount").value;
             const status = document.getElementById("status");
@@ -730,13 +643,14 @@
                 });
                 status.className = "success";
                 status.innerText = `Success! Transaction: ${tx.transactionHash}`;
-                updateProgress(web3);
+                updateProgress();
             } catch (error) {
                 status.className = "error";
                 status.innerText = "Error: " + error.message;
             }
         }
 
+        // Buy with USDC
         async function buyWithUSDC() {
             const usdcAmount = document.getElementById("usdcAmount").value;
             const status = document.getElementById("status");
@@ -762,19 +676,32 @@
                 });
                 status.className = "success";
                 status.innerText = `Success! Transaction: ${tx.transactionHash}`;
-                updateProgress(web3);
+                updateProgress();
             } catch (error) {
                 status.className = "error";
                 status.innerText = "Error: " + error.message;
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            startCountdown();
-            loadTimelineAndTokenomics();
-        });
-
+        // Page load
         window.onload = function() {
+            startCountdown();
+            updateProgress();
+            init();
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const tokenomicsItems = document.querySelectorAll('.tokenomics-item');
+            timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
+            tokenomicsItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
             setInterval(createMoney, 2000);
             setInterval(createCoin, 3000);
             setInterval(createEmoji, 4000);
