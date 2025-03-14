@@ -1,772 +1,311 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity PEPE</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-            background: #132804;
-            overflow-x: hidden;
-            position: relative;
-            text-align: center;
-        }
-        .container {
-            background: #132804;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            width: 95%;
-            max-width: 1400px;
-            position: relative;
-            z-index: 10;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-            color: white;
-            margin: 20px auto;
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-        h1 {
-            font-size: 32px;
-            color: #2ecc71;
-            margin: 0 auto 20px auto;
-            text-align: center;
-        }
-        .buy-section {
-            background: #132804;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 300px;
-            margin: 20px auto;
-            z-index: 20;
-        }
-        .buy-item {
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .buy-section input {
-            padding: 12px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: 700;
-            background: #143d33;
-            color: #fff;
-            width: 100%;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-        .buy-section input::placeholder {
-            color: #fff;
-            font-weight: 700;
-            opacity: 0.8;
-        }
-        .buy-section button {
-            padding: 12px 15px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 700;
-            width: 100%;
-            font-size: 18px;
-        }
-        .buy-section button:hover {
-            background: #0056b3;
-        }
-        #status {
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 11px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.3);
-            width: 100%;
-            text-align: center;
-        }
-        .success { background: #155724; }
-        .error { background: #721c24; }
-        .processing { background: #856404; }
-        .countdown {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #007bff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .presale-info {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #fff;
-            text-align: center;
-        }
-        .presale-info p {
-            margin: 5px 0;
-        }
-        .progress-bar {
-            margin-top: 20px;
-            background: #132804;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        .progress-bar .bar {
-            width: 100%;
-            height: 20px;
-            background: #143d33;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-bar .fill {
-            height: 100%;
-            background: #007bff;
-            width: 0%;
-            transition: width 1s ease-in-out;
-        }
-        .timeline, .tokenomics, .about {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 50px 0;
-            padding: 30px;
-            background: #132804;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            color: white;
-            margin-top: 70px;
-        }
-        .timeline-item, .tokenomics-item {
-            text-align: center;
-            width: 18%;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-in-out;
-        }
-        .timeline-item span, .tokenomics-item span {
-            display: block;
-            width: 100px;
-            height: 100px;
-            background: #143d33;
-            border-radius: 50%;
-            border: 5px solid #007bff;
-            margin: auto;
-            line-height: 100px;
-            font-size: 40px;
-            color: #007bff;
-            cursor: pointer;
-        }
-        .about {
-            flex-direction: column;
-            text-align: center;
-        }
-        .about h2 {
-            color: #2ecc71;
-            margin-bottom: 20px;
-        }
-        .about p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 0;
-        }
-        .faq, .how-to-buy, .subscribe, .wallet, .socials {
-            margin-top: 40px;
-            text-align: left;
-            background: #132804;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-        .money {
-            position: absolute;
-            width: 50px;
-            height: auto;
-            opacity: 0.9;
-            animation: fallingMoney 4s linear forwards;
-            z-index: 5;
-        }
-        @keyframes fallingMoney {
-            from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-            to { transform: translateY(500px) rotate(360deg); opacity: 0; }
-        }
-        .coin {
-            position: absolute;
-            width: 40px;
-            height: auto;
-            opacity: 0.8;
-            animation: fallingCoin 5s linear infinite;
-            z-index: 5;
-        }
-        @keyframes fallingCoin {
-            from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-            to { transform: translateY(500px) rotate(720deg); opacity: 0; }
-        }
-        .eyes {
-            position: absolute;
-            width: 100px;
-            height: auto;
-            z-index: 6;
-            animation: blinkEyes 6s infinite ease-in-out;
-        }
-        @keyframes blinkEyes {
-            0% { opacity: 0; left: 10%; top: 10%; transform: translate(0, 0); }
-            20% { opacity: 1; left: 30%; top: 20%; transform: translate(-50%, -50%); }
-            40% { opacity: 1; left: 50%; top: 40%; transform: translate(-50%, -50%); }
-            60% { opacity: 1; left: 70%; top: 60%; transform: translate(-50%, -50%); }
-            80% { opacity: 0; left: 40%; top: 80%; transform: translate(-50%, -50%); }
-            100% { opacity: 0; left: 10%; top: 10%; transform: translate(0, 0); }
-        }
-        .emoji {
-            position: absolute;
-            font-size: 50px;
-            opacity: 0.7;
-            z-index: 4;
-            animation: floatEmoji 10s infinite ease-in-out;
-        }
-        @keyframes floatEmoji {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
-            50% { transform: translate(100px, -50px) rotate(180deg); opacity: 1; }
-            100% { transform: translate(0, 0) rotate(360deg); opacity: 0.7; }
-        }
-        .subscribe input {
-            padding: 10px;
-            margin-right: 10px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 700;
-            background: #143d33;
-            color: #fff;
-            width: 100%;
-            max-width: 200px;
-            margin: 0 auto;
-        }
-        .subscribe input::placeholder {
-            color: #fff;
-            font-weight: 700;
-            opacity: 0.8;
-        }
-        .subscribe button, .wallet button, #scrollTop {
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 700;
-            width: 100%;
-            max-width: 200px;
-            margin: 10px auto 0 auto;
-        }
-        .subscribe button:hover, .wallet button:hover, #scrollTop:hover {
-            background: #0056b3;
-        }
-        .socials a {
-            margin: 0 10px;
-            color: #007bff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        .socials a:hover {
-            color: #0056b3;
-        }
-        #timelineInfo {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 123, 255, 0.9);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            width: 70%;
-            max-width: 600px;
-            font-size: 18px;
-            line-height: 1.5;
-            display: none;
-            z-index: 200;
-            text-align: center;
-        }
-        @media (max-width: 768px) {
-            .timeline, .tokenomics, .about {
-                flex-direction: column;
-                padding: 15px;
-            }
-            .timeline-item, .tokenomics-item {
-                width: 100%;
-                margin-bottom: 20px;
-                opacity: 1;
-                transform: none;
-            }
-            .timeline-item span, .tokenomics-item span {
-                width: 80px;
-                height: 80px;
-                line-height: 80px;
-                font-size: 30px;
-            }
-            .buy-section {
-                width: 250px;
-            }
-            .buy-item {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            .container {
-                width: 100%;
-                padding: 20px;
-            }
-            #timelineInfo {
-                width: 90%;
-                font-size: 16px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            .eyes {
-                width: 80px;
-            }
-            .coin, .emoji {
-                font-size: 30px;
-                width: 30px;
-            }
-            .buy-section input {
-                padding: 10px;
-                font-size: 16px;
-            }
-            .buy-section button {
-                padding: 10px 15px;
-                font-size: 16px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Charity PEPE (CPEPE) Presale</h1>
-        <div class="countdown" id="countdown">Loading...</div>
-        <div class="presale-info">
-            <p>Presale, buy now at $0.0001 for 1 CPEPE Token</p>
-            <p>Presale Stage 1: March 7, 2025, 20:00 UTC - July 30, 2025, 20:00 UTC</p>
-            <p>Token Contract: <span id="tokenContract">0xAD2128444D175835075F017263deB7fece25c881</span></p>
-        </div>
-        <div class="progress-bar">
-            <h2>Presale Progress</h2>
-            <div class="bar">
-                <div class="fill" id="progressFill"></div>
-            </div>
-            <p id="progressText">0% of tokens sold (0 / 200,000,000,000 CPEPE)</p>
-        </div>
-        <div class="buy-section">
-            <div class="buy-item">
-                <input type="number" id="ethAmount" placeholder="Enter ETH Amount" step="0.001">
-                <button onclick="buyWithETH()">Buy with ETH</button>
-            </div>
-            <div class="buy-item">
-                <input type="number" id="usdtAmount" placeholder="Enter USDT Amount" step="1">
-                <button onclick="buyWithUSDT()">Buy with USDT</button>
-            </div>
-            <div class="buy-item">
-                <input type="number" id="usdcAmount" placeholder="Enter USDC Amount" step="1">
-                <button onclick="buyWithUSDC()">Buy with USDC</button>
-            </div>
-            <p id="status">Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a> to buy CPEPE!</p>
-        </div>
-        <div class="timeline">
-            <div class="timeline-item" id="presale1">
-                <span>📅</span>
-                <p>Presale Stage 1</p>
-            </div>
-            <div class="timeline-item" id="presale2">
-                <span>📅</span>
-                <p>Presale Stage 2</p>
-            </div>
-            <div class="timeline-item" id="liquidity">
-                <span>💰</span>
-                <p>Liquidity Launch</p>
-            </div>
-            <div class="timeline-item" id="marketCap">
-                <span>🚀</span>
-                <p>Market Cap Goal</p>
-            </div>
-        </div>
-        <div class="tokenomics">
-            <div class="tokenomics-item" id="reserve">
-                <span>🏦</span>
-                <p>Reserve</p>
-            </div>
-            <div class="tokenomics-item" id="presale">
-                <span>📈</span>
-                <p>Presale</p>
-            </div>
-            <div class="tokenomics-item" id="publicSale">
-                <span>🌍</span>
-                <p>Public Sale</p>
-            </div>
-            <div class="tokenomics-item" id="marketing">
-                <span>📣</span>
-                <p>Marketing</p>
-            </div>
-            <div class="tokenomics-item" id="team">
-                <span>👥</span>
-                <p>Team</p>
-            </div>
-        </div>
-        <div class="about">
-            <h2>About CharityPEPE</h2>
-            <p>CharityPEPE (CPEPE) is an innovative cryptocurrency initiative launched on March 7, 2025, aiming to combine entertainment, community engagement, and meaningful impact. Operating on the Ethereum blockchain, CPEPE targets a $2 billion market cap by March 2026 while rewarding its supporters. With a total supply of 1 trillion tokens, the presale gives early investors the opportunity to join at $0.0001 (Stage 1) and $0.0002 (Stage 2), enhanced by a 1.5% bonus from our reserve fund. Be part of our mission to transform meme coins with a purpose! Ribbit! 🐸</p>
-        </div>
-        <div class="how-to-buy">
-            <h2>How to Buy CPEPE</h2>
-            <ol>
-                <li>Connect your wallet (MetaMask, TrustWallet, etc.).</li>
-                <li>Choose the amount of CPEPE tokens.</li>
-                <li>Confirm the transaction.</li>
-                <li>Wait for the transaction to complete.</li>
-            </ol>
-        </div>
-        <div class="wallet">
-            <h2>Presale Wallet Address</h2>
-            <p id="walletAddress">0xAD2128444D175835075F017263deB7fece25c881</p>
-            <button onclick="copyAddress()">Copy Address</button>
-        </div>
-        <div class="faq">
-            <h2>Frequently Asked Questions</h2>
-            <p><strong>When will the presale end?</strong> - January 1, 2026</p>
-            <p><strong>How do I stake my CPEPE?</strong> - Staking will be available after January 2026.</p>
-            <p><strong>What is the target market cap?</strong> - $2 billion by March 2026.</p>
-        </div>
-        <div class="subscribe">
-            <h2>Subscribe for Updates</h2>
-            <form id="subscribeForm">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
-            <p id="subscribeMessage" style="display: none;">Thank you for subscribing!</p>
-        </div>
-        <div class="socials">
-            <h2>Join Our Community</h2>
-            <a href="https://www.charitypepe.com/" target="_blank">Website</a>
-            <a href="https://x.com/CharityPePE" target="_blank">X.com</a>
-            <a href="https://t.me/CharityPP" target="_blank">Telegram</a>
-        </div>
-    </div>
-    <img src="https://cdn.pixabay.com/photo/2018/03/27/21/22/eyes-3267160_1280.png" alt="Blinking Eyes" class="eyes">
-    <button id="scrollTop" style="position: fixed; bottom: 20px; right: 20px;">Back to Top</button>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
-    <script>
-        // Countdown
-        function startCountdown() {
-            const stage1Start = new Date("March 7, 2025 20:00:00 UTC").getTime();
-            const stage1End = new Date("July 30, 2025 20:00:00 UTC").getTime();
-            const stage2End = new Date("January 1, 2026 23:59:59 UTC").getTime();
-            const countdownElement = document.getElementById("countdown");
-            if (!countdownElement) return;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.28;
 
-            const interval = setInterval(() => {
-                const now = new Date().getTime();
+/**
+ * @title CharityPEPE - A token contract with presale and staking features
+ * @notice This contract allows presale purchases and staking with rewards
+ */
+contract CharityPEPE {
+    string public name = "CharityPEPE";
+    string public symbol = "CPEPE";
+    uint256 public decimals = 18;
+    uint256 public totalSupply;
 
-                if (now < stage1Start) {
-                    const timeLeft = stage1Start - now;
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                    countdownElement.innerHTML = `Presale Stage 1 starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-                } else if (now >= stage1Start && now <= stage1End) {
-                    const timeLeft = stage1End - now;
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                    countdownElement.innerHTML = `Presale Stage 1 ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-                } else if (now > stage1End && now <= stage2End) {
-                    const timeLeft = stage2End - now;
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                    countdownElement.innerHTML = `Presale Stage 2 ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-                } else {
-                    countdownElement.innerHTML = "The presale has ended!";
-                    clearInterval(interval);
-                }
-            }, 1000);
+    uint256 private constant TRANSFER_LOCK_TIME = 1765555200; // Jan 10, 2026 - lock for buyers only
+    uint256 private constant STAGE1_START = 1747843200; // March 21, 2025, 20:00 UTC
+    uint256 private constant STAGE1_END = 1759180800;   // July 30, 2025, 20:00 UTC
+    uint256 private constant STAGE2_START = 1759181100; // July 30, 2025, 20:05 UTC
+    uint256 private constant STAGE2_END = 1765036800;   // January 1, 2026, 20:00 UTC
+    uint256 private constant STAGE1_RATE = 10000;       // 1 ETH = 10,000 CPEPE
+    uint256 private constant STAGE2_RATE = 5000;        // 1 ETH = 5,000 CPEPE
+    address private constant USDT_ADDRESS = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    uint256 private constant USDT_RATE = 1000;          // 1 USDT = 1,000 CPEPE
+    address private constant USDC_ADDRESS = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+    uint256 private constant USDC_RATE = 1000;          // 1 USDC = 1,000 CPEPE
+    uint256 private constant MAX_PURCHASE = 100 ether;
+    uint256 private constant MIN_PURCHASE = 0.01 ether;
+    uint256 private constant MAX_TOKENS_FOR_SALE = 5e11 * (10 ** 18); // 500 милиарда за предпродажба
+    uint256 private constant MIN_STAKE_PERIOD = 6 * 30 days; // 6 месеца
+    uint256 private constant MAX_MINTABLE = 1e11 * (10 ** 18); // 100 милиарда максимум за mint
+
+    address private _owner;
+    bool private _paused;
+    bool private _locked;
+    uint256 private _tokensSold;
+    uint256 private _mintedAmount;
+    mapping(address => uint256) private _lastUnstakeBlock;
+    mapping(address => uint256) private _balanceOf;
+    mapping(address => mapping(address => uint256)) private _allowance;
+    mapping(address => uint256) private _stakedBalance;
+    mapping(address => uint256) private _stakeStartTime;
+    mapping(address => bool) private _isBuyer;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Mint(address indexed to, uint256 value);
+    event Paused(address account);
+    event Unpaused(address account);
+    event Staked(address indexed user, uint256 amount);
+    event Unstaked(address indexed user, uint256 amount, uint256 reward);
+    event TokensPurchased(address indexed buyer, uint256 amount, string currency);
+    event ETHWithdrawn(address indexed owner, uint256 amount);
+    event USDTWithdrawn(address indexed owner, uint256 amount);
+    event USDCWithdrawn(address indexed owner, uint256 amount);
+    event EmergencyWithdraw(address indexed owner, address indexed account, uint256 amount);
+
+    modifier onlyOwner() {
+        require(msg.sender == _owner, "Not owner");
+        _;
+    }
+
+    modifier whenNotPaused() {
+        require(!_paused, "Paused");
+        _;
+    }
+
+    modifier nonReentrant() {
+        require(!_locked, "Reentrant call");
+        _locked = true;
+        _;
+        _locked = false;
+    }
+
+    constructor() payable {
+        _owner = msg.sender;
+        totalSupply = 1e12 * (10 ** decimals); // 1 трилион токена
+        _balanceOf[msg.sender] = totalSupply; // Всички токени при собственика
+    }
+
+    // Покупка с ETH в предпродажба
+    function buyWithETH() public payable whenNotPaused nonReentrant {
+        require(block.timestamp >= STAGE1_START && block.timestamp <= STAGE2_END, "Sale not active");
+        require(msg.value >= MIN_PURCHASE, "Below min purchase");
+        require(msg.value <= MAX_PURCHASE, "Exceeds max purchase");
+        uint256 rate = (block.timestamp <= STAGE1_END) ? STAGE1_RATE : STAGE2_RATE;
+        uint256 tokenAmount = msg.value * rate;
+        require(_balanceOf[_owner] >= tokenAmount, "Low owner balance");
+        require(_tokensSold + tokenAmount <= MAX_TOKENS_FOR_SALE, "Exceeds presale limit");
+        
+        _balanceOf[_owner] -= tokenAmount;
+        _balanceOf[msg.sender] += tokenAmount;
+        _tokensSold += tokenAmount;
+        _isBuyer[msg.sender] = true;
+        emit TokensPurchased(msg.sender, tokenAmount, "ETH");
+    }
+
+    // Покупка с USDT в предпродажба
+    function buyWithUSDT(uint256 usdtAmount) public whenNotPaused nonReentrant {
+        require(block.timestamp >= STAGE1_START && block.timestamp <= STAGE2_END, "Sale not active");
+        require(usdtAmount >= MIN_PURCHASE / USDT_RATE, "Below min purchase");
+        require(usdtAmount <= MAX_PURCHASE / USDT_RATE, "Exceeds max purchase");
+        uint256 tokenAmount = usdtAmount * USDT_RATE;
+        require(_balanceOf[_owner] >= tokenAmount, "Low owner balance");
+        require(_tokensSold + tokenAmount <= MAX_TOKENS_FOR_SALE, "Exceeds presale limit");
+        
+        uint256 balanceBefore = IERC20(USDT_ADDRESS).balanceOf(_owner);
+        require(IERC20(USDT_ADDRESS).transferFrom(msg.sender, _owner, usdtAmount), "USDT transfer failed");
+        uint256 balanceAfter = IERC20(USDT_ADDRESS).balanceOf(_owner);
+        require(balanceAfter >= balanceBefore + usdtAmount, "Invalid USDT transfer");
+
+        _balanceOf[_owner] -= tokenAmount;
+        _balanceOf[msg.sender] += tokenAmount;
+        _tokensSold += tokenAmount;
+        _isBuyer[msg.sender] = true;
+        emit TokensPurchased(msg.sender, tokenAmount, "USDT");
+    }
+
+    // Покупка с USDC в предпродажба
+    function buyWithUSDC(uint256 usdcAmount) public whenNotPaused nonReentrant {
+        require(block.timestamp >= STAGE1_START && block.timestamp <= STAGE2_END, "Sale not active");
+        require(usdcAmount >= MIN_PURCHASE / USDC_RATE, "Below min purchase");
+        require(usdcAmount <= MAX_PURCHASE / USDC_RATE, "Exceeds max purchase");
+        uint256 tokenAmount = usdcAmount * USDC_RATE;
+        require(_balanceOf[_owner] >= tokenAmount, "Low owner balance");
+        require(_tokensSold + tokenAmount <= MAX_TOKENS_FOR_SALE, "Exceeds presale limit");
+        
+        uint256 balanceBefore = IERC20(USDC_ADDRESS).balanceOf(_owner);
+        require(IERC20(USDC_ADDRESS).transferFrom(msg.sender, _owner, usdcAmount), "USDC transfer failed");
+        uint256 balanceAfter = IERC20(USDC_ADDRESS).balanceOf(_owner);
+        require(balanceAfter >= balanceBefore + usdcAmount, "Invalid USDC transfer");
+
+        _balanceOf[_owner] -= tokenAmount;
+        _balanceOf[msg.sender] += tokenAmount;
+        _tokensSold += tokenAmount;
+        _isBuyer[msg.sender] = true;
+        emit TokensPurchased(msg.sender, tokenAmount, "USDC");
+    }
+
+    // Изтегляне на ETH (само собственик)
+    function withdrawETH() public onlyOwner nonReentrant {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No ETH to withdraw");
+        (bool sent, ) = payable(_owner).call{value: balance}("");
+        require(sent, "ETH withdrawal failed");
+        emit ETHWithdrawn(_owner, balance);
+    }
+
+    // Изтегляне на USDT (само собственик)
+    function withdrawUSDT() public onlyOwner nonReentrant {
+        uint256 balance = IERC20(USDT_ADDRESS).balanceOf(address(this));
+        require(balance > 0, "No USDT to withdraw");
+        uint256 ownerBalanceBefore = IERC20(USDT_ADDRESS).balanceOf(_owner);
+        require(IERC20(USDT_ADDRESS).transfer(_owner, balance), "USDT withdrawal failed");
+        uint256 ownerBalanceAfter = IERC20(USDT_ADDRESS).balanceOf(_owner);
+        require(ownerBalanceAfter >= ownerBalanceBefore + balance, "Invalid USDT withdrawal");
+        emit USDTWithdrawn(_owner, balance);
+    }
+
+    // Изтегляне на USDC (само собственик)
+    function withdrawUSDC() public onlyOwner nonReentrant {
+        uint256 balance = IERC20(USDC_ADDRESS).balanceOf(address(this));
+        require(balance > 0, "No USDC to withdraw");
+        uint256 ownerBalanceBefore = IERC20(USDC_ADDRESS).balanceOf(_owner);
+        require(IERC20(USDC_ADDRESS).transfer(_owner, balance), "USDC withdrawal failed");
+        uint256 ownerBalanceAfter = IERC20(USDC_ADDRESS).balanceOf(_owner);
+        require(ownerBalanceAfter >= ownerBalanceBefore + balance, "Invalid USDC withdrawal");
+        emit USDCWithdrawn(_owner, balance);
+    }
+
+    function owner() external view returns (address) {
+        return _owner;
+    }
+
+    function paused() external view returns (bool) {
+        return _paused;
+    }
+
+    function tokensSold() external view returns (uint256) {
+        return _tokensSold;
+    }
+
+    function balanceOf(address account) external view returns (uint256) {
+        return _balanceOf[account];
+    }
+
+    function allowance(address account, address spender) external view returns (uint256) {
+        return _allowance[account][spender];
+    }
+
+    function isBuyer(address account) external view returns (bool) {
+        return _isBuyer[account];
+    }
+
+    // Mint на нови токени с лимит (само собственик)
+    function mint(address to, uint256 value) public onlyOwner nonReentrant returns (bool) {
+        require(to != address(0), "Invalid address");
+        require(_mintedAmount + value <= MAX_MINTABLE, "Exceeds mint limit");
+        totalSupply += value;
+        _balanceOf[to] += value;
+        _mintedAmount += value;
+        emit Mint(to, value);
+        return true;
+    }
+
+    function pause() public onlyOwner {
+        require(!_paused, "Already paused");
+        _paused = true;
+        emit Paused(msg.sender);
+    }
+
+    function unpause() public onlyOwner {
+        require(_paused, "Not paused");
+        _paused = false;
+        emit Unpaused(msg.sender);
+    }
+
+    // Спешно изтегляне на стейкнати токени (само собственик)
+    function emergencyWithdraw(address account) public onlyOwner nonReentrant {
+        require(_paused, "Not paused");
+        require(account != address(0), "Invalid address");
+        uint256 stakedAmount = _stakedBalance[account];
+        if (stakedAmount > 0) {
+            _stakedBalance[account] = 0;
+            _balanceOf[account] += stakedAmount;
+            emit Unstaked(account, stakedAmount, 0);
+            emit EmergencyWithdraw(msg.sender, account, stakedAmount);
         }
+    }
 
-        // Progress bar update with real contract data
-        async function updateProgress() {
-            try {
-                const totalTokens = 200000000000; // 200 billion for presale
-                const tokensSold = await contract.methods.tokensSold().call();
-                const progress = (tokensSold / totalTokens) * 100;
-                document.getElementById("progressFill").style.width = `${progress}%`;
-                document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${Number(tokensSold).toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
-            } catch (error) {
-                console.log("Error updating progress:", error);
-                const now = new Date().getTime();
-                const startStage1 = new Date("March 7, 2025").getTime();
-                const endStage2 = new Date("January 1, 2026").getTime();
-                const totalTokens = 200000000000;
-                const presaleDays = (endStage2 - startStage1) / (1000 * 60 * 60 * 24);
-                const daysPassed = (now - startStage1) / (1000 * 60 * 60 * 24);
-                const progress = Math.min(Math.max((daysPassed / presaleDays) * 100, 0), 100);
-                const tokensSold = Math.floor(totalTokens * (progress / 100));
-                document.getElementById("progressFill").style.width = `${progress}%`;
-                document.getElementById("progressText").innerText = `${progress.toFixed(1)}% of tokens sold (${tokensSold.toLocaleString()} / ${totalTokens.toLocaleString()} CPEPE)`;
-            }
-        }
+    // Стейкване на токени за 6 месеца
+    function stake(uint256 amount) public whenNotPaused nonReentrant {
+        require(amount > 0, "Zero amount");
+        require(amount <= _balanceOf[msg.sender], "Low balance");
 
-        // Animations
-        function createMoney() {
-            if (document.querySelectorAll('.money').length >= 10) return;
-            const money = document.createElement("img");
-            money.classList.add("money");
-            money.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Euro_banknotes.png/320px-Euro_banknotes.png";
-            money.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-            money.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            document.body.appendChild(money);
-            money.addEventListener('animationend', () => money.remove());
-        }
+        _balanceOf[msg.sender] -= amount;
+        _stakedBalance[msg.sender] += amount;
+        _stakeStartTime[msg.sender] = block.timestamp;
+        emit Staked(msg.sender, amount);
+    }
 
-        function createCoin() {
-            if (document.querySelectorAll('.coin').length >= 5) return;
-            const coin = document.createElement("img");
-            coin.classList.add("coin");
-            coin.src = "https://cryptologos.cc/logos/ethereum-eth-logo.png";
-            coin.style.left = `${Math.random() * (window.innerWidth - 40)}px`;
-            coin.style.animationDuration = `${Math.random() * 4 + 3}s`;
-            document.body.appendChild(coin);
-            coin.addEventListener('animationend', () => coin.remove());
-        }
+    // Изтегляне на стейкнати токени с награда
+    function unstake() public whenNotPaused nonReentrant {
+        require(_stakedBalance[msg.sender] > 0, "No stake");
+        require(_lastUnstakeBlock[msg.sender] != block.number, "Already unstaked this block");
+        address sender = msg.sender;
+        uint256 stakeTime = block.timestamp - _stakeStartTime[sender];
+        require(stakeTime >= MIN_STAKE_PERIOD, "Stake period too short");
 
-        function createEmoji() {
-            if (document.querySelectorAll('.emoji').length >= 5) return;
-            const emojis = ['🐸', '💰', '🚀', '🌟', '🎉'];
-            const emoji = document.createElement("span");
-            emoji.classList.add("emoji");
-            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            emoji.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
-            emoji.style.top = `${Math.random() * (window.innerHeight - 50)}px`;
-            emoji.style.animationDuration = `${Math.random() * 5 + 5}s`;
-            document.body.appendChild(emoji);
-            emoji.addEventListener('animationend', () => emoji.remove());
-        }
+        uint256 amount = _stakedBalance[sender];
+        uint256 reward = (amount * 5 * stakeTime) / (100 * 365 days); // 5% годишна награда
+        require(_balanceOf[address(this)] >= reward, "Insufficient reward pool"); // Собственикът трябва да депозира токени
+        _stakedBalance[sender] = 0;
+        _balanceOf[address(this)] -= reward;
+        _balanceOf[sender] += amount + reward;
+        _lastUnstakeBlock[sender] = block.number;
+        emit Unstaked(sender, amount, reward);
+    }
 
-        // Copy address
-        function copyAddress() {
-            const address = document.getElementById("walletAddress").innerText;
-            navigator.clipboard.writeText(address).then(() => alert("Address copied!"));
-        }
+    // Трансфер на токени без изгаряне
+    function transfer(address to, uint256 amount) public whenNotPaused nonReentrant returns (bool) {
+        require(to != address(0), "Invalid address");
+        require(amount > 0, "Zero amount");
+        address sender = msg.sender;
+        require(_balanceOf[sender] >= amount, "Low balance");
+        require(!_isBuyer[sender] || block.timestamp > TRANSFER_LOCK_TIME, "Buyers locked until Jan 10, 2026");
 
-        // Web3 setup
-        const web3 = new Web3(window.ethereum);
-        const contractAddress = "0xAD2128444D175835075F017263deB7fece25c881";
-        const contractABI = [{"inputs":[],"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalAmount","type":"uint256"}],"name":"Airdrop","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ETHWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"period","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"string","name":"currency","type":"string"}],"name":"TokensPurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDCWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"USDTWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"airdrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyWithETH","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdcAmount","type":"uint256"}],"name":"buyWithUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"usdtAmount","type":"uint256"}],"name":"buyWithUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"period","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tokensSold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUSDT","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-        const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // USDT Mainnet
-        const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; // USDC Mainnet
-        const erc20ABI = [
-            {"constant": false, "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}], "name": "approve", "outputs": [{"name": "", "type": "bool"}], "type": "function"},
-            {"constant": true, "inputs": [{"name": "account", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}
-        ];
+        _balanceOf[sender] -= amount;
+        _balanceOf[to] += amount;
+        emit Transfer(sender, to, amount);
+        return true;
+    }
 
-        const contract = new web3.eth.Contract(contractABI, contractAddress);
-        const usdtContract = new web3.eth.Contract(erc20ABI, usdtAddress);
-        const usdcContract = new web3.eth.Contract(erc20ABI, usdcAddress);
+    // Одобрение за трансфер от друг адрес
+    function approve(address spender, uint256 value) public whenNotPaused returns (bool) {
+        require(spender != address(0), "Invalid spender");
+        require(value <= totalSupply, "Value exceeds total supply");
+        _allowance[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
 
-        // Initialization
-        async function init() {
-            const status = document.getElementById("status");
-            if (!window.ethereum) {
-                status.innerHTML = "Please install <a href='https://metamask.io' target='_blank' style='color: #007bff;'>MetaMask</a>!";
-                return;
-            }
-            try {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const networkId = await web3.eth.net.getId();
-                if (networkId !== 1) {
-                    status.className = "error";
-                    status.innerText = "Please switch to Ethereum Mainnet!";
-                    return;
-                }
-                status.className = "success";
-                status.innerText = "Connected to the network!";
-                updateProgress();
-            } catch (error) {
-                status.className = "error";
-                status.innerText = "Connection error: " + error.message;
-            }
-        }
+    // Трансфер от друг адрес без изгаряне
+    function transferFrom(address from, address to, uint256 value) public whenNotPaused nonReentrant returns (bool) {
+        require(from != address(0), "Invalid from");
+        require(to != address(0), "Invalid to");
+        require(value > 0, "Zero value");
+        require(_balanceOf[from] >= value, "Low balance");
+        require(_allowance[from][msg.sender] >= value, "Low allowance");
+        require(!_isBuyer[from] || block.timestamp > TRANSFER_LOCK_TIME, "Buyers locked until Jan 10, 2026");
 
-        // Buy with ETH
-        async function buyWithETH() {
-            const ethAmount = document.getElementById("ethAmount").value;
-            const status = document.getElementById("status");
-            if (!ethAmount || ethAmount <= 0) {
-                alert("Please enter a valid ETH amount!");
-                return;
-            }
-            try {
-                const accounts = await web3.eth.getAccounts();
-                const weiAmount = web3.utils.toWei(ethAmount, "ether");
-                status.className = "processing";
-                status.innerText = "Processing...";
-                const tx = await contract.methods.buyWithETH().send({
-                    from: accounts[0],
-                    value: weiAmount,
-                    gas: 300000,
-                    gasPrice: await web3.eth.getGasPrice()
-                });
-                status.className = "success";
-                status.innerText = `Success! Transaction: ${tx.transactionHash}`;
-                updateProgress();
-            } catch (error) {
-                status.className = "error";
-                status.innerText = "Error: " + error.message;
-            }
-        }
+        _balanceOf[from] -= value;
+        _balanceOf[to] += value;
+        _allowance[from][msg.sender] -= value;
+        emit Transfer(from, to, value);
+        return true;
+    }
 
-        // Buy with USDT
-        async function buyWithUSDT() {
-            const usdtAmount = document.getElementById("usdtAmount").value;
-            const status = document.getElementById("status");
-            if (!usdtAmount || usdtAmount <= 0) {
-                alert("Please enter a valid USDT amount!");
-                return;
-            }
-            try {
-                const accounts = await web3.eth.getAccounts();
-                const weiAmount = web3.utils.toWei(usdtAmount, "mwei");
-                status.className = "processing";
-                status.innerText = "Approving USDT...";
-                await usdtContract.methods.approve(contractAddress, weiAmount).send({
-                    from: accounts[0],
-                    gas: 100000,
-                    gasPrice: await web3.eth.getGasPrice()
-                });
-                status.innerText = "Processing...";
-                const tx = await contract.methods.buyWithUSDT(weiAmount).send({
-                    from: accounts[0],
-                    gas: 400000,
-                    gasPrice: await web3.eth.getGasPrice()
-                });
-                status.className = "success";
-                status.innerText = `Success! Transaction: ${tx.transactionHash}`;
-                updateProgress();
-            } catch (error) {
-                status.className = "error";
-                status.innerText = "Error: " + error.message;
-            }
-        }
+    // Депозиране на токени в договора за стейкинг награди (само собственик)
+    function depositRewardPool(uint256 amount) public onlyOwner nonReentrant {
+        require(amount > 0, "Zero amount");
+        require(_balanceOf[msg.sender] >= amount, "Low balance");
+        _balanceOf[msg.sender] -= amount;
+        _balanceOf[address(this)] += amount;
+        emit Transfer(msg.sender, address(this), amount);
+    }
+}
 
-        // Buy with USDC
-        async function buyWithUSDC() {
-            const usdcAmount = document.getElementById("usdcAmount").value;
-            const status = document.getElementById("status");
-            if (!usdcAmount || usdcAmount <= 0) {
-                alert("Please enter a valid USDC amount!");
-                return;
-            }
-            try {
-                const accounts = await web3.eth.getAccounts();
-                const weiAmount = web3.utils.toWei(usdcAmount, "mwei");
-                status.className = "processing";
-                status.innerText = "Approving USDC...";
-                await usdcContract.methods.approve(contractAddress, weiAmount).send({
-                    from: accounts[0],
-                    gas: 100000,
-                    gasPrice: await web3.eth.getGasPrice()
-                });
-                status.innerText = "Processing...";
-                const tx = await contract.methods.buyWithUSDC(weiAmount).send({
-                    from: accounts[0],
-                    gas: 400000,
-                    gasPrice: await web3.eth.getGasPrice()
-                });
-                status.className = "success";
-                status.innerText = `Success! Transaction: ${tx.transactionHash}`;
-                updateProgress();
-            } catch (error) {
-                status.className = "error";
-                status.innerText = "Error: " + error.message;
-            }
-        }
-
-        // Page load
-        window.onload = function() {
-            startCountdown();
-            updateProgress();
-            init();
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            const tokenomicsItems = document.querySelectorAll('.tokenomics-item');
-            timelineItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, index * 300);
-            });
-            tokenomicsItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, index * 300);
-            });
-            setInterval(createMoney, 2000);
-            setInterval(createCoin, 3000);
-            setInterval(createEmoji, 4000);
-
-            let infoBox = document.createElement("div");
-            infoBox.id = "timelineInfo";
-            document.body.appendChild(infoBox);
-
-            const timelineSpans = document.querySelectorAll('.timeline-item span, .tokenomics-item span');
-            timelineSpans.forEach(span => {
-                span.addEventListener('click', function() {
-                    const info = {
-                        presale1: "Stage 1: March 7, 2025 - July 30, 2025. Price: $0.0001. 100B CPEPE.",
-                        presale2: "Stage 2: July 30, 2025 - January 1, 2026. Price: $0.0002. 100B CPEPE.",
-                        liquidity: "Liquidity Launch: January 2, 2026 with $15M.",
-                        marketCap: "Goal: $2B by March 2026.",
-                        reserve: "Reserve: 40% (400B CPEPE).",
-                        presale: "Presale: 20% (200B CPEPE) + 1.5% bonus.",
-                        publicSale: "Public Sale: 20% (200B CPEPE).",
-                        marketing: "Marketing: 15% (150B CPEPE).",
-                        team: "Team: 5% (50B CPEPE), locked for 2 years."
-                    };
-                    const id = this.parentElement.id;
-                    if (info[id]) {
-                        infoBox.textContent = info[id];
-                        infoBox.style.display = "block";
-                        setTimeout(() => infoBox.style.display = "none", 5000);
-                    }
-                });
-            });
-
-            document.getElementById("subscribeForm").addEventListener("submit", function(e) {
-                e.preventDefault();
-                document.getElementById("subscribeMessage").style.display = "block";
-                this.reset();
-                setTimeout(() => document.getElementById("subscribeMessage").style.display = "none", 3000);
-            });
-
-            document.getElementById("scrollTop").addEventListener("click", () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        };
-    </script>
-</body>
-</html>
+interface IERC20 {
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+}
